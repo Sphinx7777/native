@@ -1,12 +1,12 @@
 
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, ScrollView} from 'react-native';
-import { IDataItem } from '../../App';
+import { IDataItem } from './index';
 
 interface ICallMenuProps {
     setCurrentItemIndex: (currentItemIndex: number) => void;
     currentItemIndex: number;
-    callData: IDataItem[];
+    callData: IDataItem[] | undefined;
 }
 
 interface ICallMenuState {
@@ -19,8 +19,7 @@ const CallMenu = (props: ICallMenuProps) => {
     })
 
     const handleNextPress = () => {
-        console.log('currentItemIndex', currentItemIndex, 'callData.length', callData?.length)
-        if (currentItemIndex < callData?.length - 1) {
+        if (callData && currentItemIndex < callData?.length - 1) {
             setCurrentItemIndex(currentItemIndex + 1)
         }else {
             setCurrentItemIndex(0)

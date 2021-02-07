@@ -1,22 +1,21 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, Button, TextInput } from 'react-native';
-import { IDataItem } from '../../App';
+import { IDataItem } from './index';
+
 
 interface ICustomInputProps {
-    currentElement: IDataItem;
+    currentElement: IDataItem | null;
 }
 interface ICustomInputState {
     name: string;
     description: string;
-    currentElement: IDataItem;
 }
 const CustomInput = (props: ICustomInputProps) => {
     const { currentElement } = props;
 
     const [state, setState] = useState<ICustomInputState>({
         name: '',
-        description: '',
-        currentElement
+        description: ''
     })
 
     const handlePress = () => {
@@ -57,11 +56,11 @@ const CustomInput = (props: ICustomInputProps) => {
             <View style={styles.container}>
             <View style={styles.textContainer}>
                 <View style={styles.nameLine}>
-                    <Text style={styles.text}>{currentElement.name}</Text>
-                    <Text style={styles.text}>{currentElement.phone}</Text>
+                    <Text style={styles.text}>{currentElement?.name}</Text>
+                    <Text style={styles.text}>{currentElement?.phone}</Text>
                     <Text style={styles.text}>DB_Type</Text>
                 </View>
-                <Text style={styles.text}>{currentElement.email}</Text>
+                <Text style={styles.text}>{currentElement?.email}</Text>
             </View>
                 <TextInput
                     style={styles.textInput}

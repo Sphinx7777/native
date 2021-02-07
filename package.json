@@ -13,6 +13,7 @@
     "expo-status-bar": "~1.0.3",
     "humps": "^2.0.1",
     "immutable": "^4.0.0-rc.12",
+    "json-immutable": "^0.5.0",
     "normalizr": "^3.6.1",
     "react": "16.13.1",
     "react-dom": "16.13.1",

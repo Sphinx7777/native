@@ -3,11 +3,11 @@ import React, { useState } from 'react';
 import { StyleSheet, Text, View, ScrollView, FlatList, TouchableOpacity, GestureResponderEvent } from 'react-native';
 // @ts-ignore
 import call from 'react-native-phone-call'
-import { IDataItem } from '../../App';
+import { IDataItem } from './index';
 
 
 interface IContactListProps {
-    callData: IDataItem[];
+    callData: IDataItem[] | undefined;
     setCurrentItemIndex: (currentItem: number) => void;
     currentItemIndex: number;
 }
@@ -54,11 +54,11 @@ const ContactList = (props: IContactListProps) => {
             onLongPress={onLongPress}
             onPress={onPress}>
                 <View style={styles.nameLine}>
-                    <Text style={styles.text}>{item.name}</Text>
-                    <Text style={styles.text}>{item.phone}</Text>
+                    <Text style={styles.text}>{item?.name}</Text>
+                    <Text style={styles.text}>{item?.phone}</Text>
                     <Text style={styles.text}>DB_Type</Text>
                 </View>
-                <Text style={styles.text}>{item.email}</Text>
+                <Text style={styles.text}>{item?.email}</Text>
                 <View style={styles.nameLine}>
                     <Text style={styles.text}>DB + Data</Text>
                     <Text style={styles.text}>Calling Status</Text>
@@ -66,14 +66,18 @@ const ContactList = (props: IContactListProps) => {
             </TouchableOpacity>
         )
     }
-    const keyExtractor = (item: IDataItem) => item.phone
+    const keyExtractor = (item: IDataItem) => item?.phone
+    console.log('callData', callData)
     return (
         <>
             <View style={styles.container}>
-                <FlatList
+                {
+                    callData && callData.length > 0 && <FlatList
                     keyExtractor={keyExtractor}
                     data={callData}
                     renderItem={renderItem} />
+                }
+
             </View>
         </>
     );
