@@ -13,33 +13,39 @@ const data = [
     {
         phone: '11111111',
         email: 'spamoglot1111@gmail.com',
-        name: 'Sergei111'
+        name: 'Sergei111',
+        date: '20-01-01'
     },
     {
         phone: '22222222',
         email: 'spamoglot222@gmail.com',
-        name: 'Sergei222'
+        name: 'Sergei222',
+        date: '20-02-02'
     },
     {
         phone: '33333333',
         email: 'spamoglot333@gmail.com',
-        name: 'Sergei333'
+        name: 'Sergei333',
+        date: '20-03-03'
     }
     ,
     {
         phone: '44444444',
         email: 'spamoglot444@gmail.com',
-        name: 'Sergei444'
+        name: 'Sergei444',
+        date: '20-04-04'
     },
     {
         phone: '55555555',
         email: 'spamoglot555@gmail.com',
-        name: 'Sergei555'
+        name: 'Sergei555',
+        date: '20-05-05'
     },
     {
         phone: '66666666',
         email: 'spamoglot666@gmail.com',
-        name: 'Sergei666'
+        name: 'Sergei666',
+        date: '20-06-06'
     }
 ]
 
@@ -47,6 +53,7 @@ export interface IDataItem {
     phone: string;
     email: string;
     name: string;
+    date: string;
 }
 interface IAppProps {
     dataItems?: IDataItem[];
@@ -55,6 +62,7 @@ interface IAppProps {
 interface IAppState {
     response: any;
     currentItemIndex: number;
+    currentElement: IDataItem | undefined;
 }
 
 const Signal = (props: IAppProps) => {
@@ -62,7 +70,8 @@ const Signal = (props: IAppProps) => {
     const dispatch = useDispatch()
     const [state, setState] = useState<IAppState>({
         response: null,
-        currentItemIndex: 0
+        currentItemIndex: 0,
+        currentElement: dataItems && dataItems[0]
     })
 
     const getData = async () => {
@@ -103,12 +112,21 @@ const Signal = (props: IAppProps) => {
         })
     }
 
+
+    const setCurrentElement = (currentElement: IDataItem) => {
+        setState((prevState) => {
+            return {
+                ...prevState,
+                currentElement,
+            }
+        })
+    }
+
     useEffect(() => {
         getData();
     }, [])
 
-    const currentElement = useMemo(() => dataItems && dataItems[state.currentItemIndex], [dataItems, state.currentItemIndex]) || null
-    const { currentItemIndex } = state
+    const { currentItemIndex, currentElement } = state
     return (
 
 
@@ -121,6 +139,8 @@ const Signal = (props: IAppProps) => {
                     callData={dataItems}
                     setCurrentItemIndex={setCurrentItemIndex}
                     makeCall={makeCall}
+                    currentElement={currentElement}
+                    setCurrentElement={setCurrentElement}
                     />
 
                 <CustomInput currentElement={currentElement} />
@@ -128,6 +148,7 @@ const Signal = (props: IAppProps) => {
                     setCurrentItemIndex={setCurrentItemIndex}
                     currentItemIndex={currentItemIndex}
                     callData={dataItems}
+                    setCurrentElement={setCurrentElement}
                     makeCall={makeCall}
                     />
             </View>

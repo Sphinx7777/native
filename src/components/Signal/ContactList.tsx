@@ -9,17 +9,24 @@ interface IContactListProps {
     setCurrentItemIndex: (currentItem: number) => void;
     currentItemIndex: number;
     makeCall: (number: string) => any;
+    setCurrentElement: (currentElement: IDataItem) => void;
+    currentElement: IDataItem | undefined;
 }
 
 interface IContactListState {
 
 }
 const ContactList = (props: IContactListProps) => {
-    const { callData, setCurrentItemIndex, currentItemIndex, makeCall } = props;
+    const { callData, setCurrentItemIndex, currentItemIndex, makeCall, setCurrentElement, currentElement} = props;
 
     const [state, setState] = useState<IContactListState>({
 
     })
+    console.log('currentItemIndex', currentItemIndex, 'currentElement', currentElement)
+
+    let renderData = callData
+    const temp = callData && callData.slice(currentItemIndex)
+    renderData = temp && callData && [...new Set([...temp,...callData])]
 
     const handleLongPress = (item: IDataItem) => {
         const { name, email, phone } = item
@@ -28,16 +35,17 @@ const ContactList = (props: IContactListProps) => {
 
     const handlePress = (data: any) => {
         const { separators, item, index } = data
-        setCurrentItemIndex(index)
+        setCurrentElement(item)
     }
 
     const renderItem = (data: any) => {
         const { item, index } = data
+        //console.log('renderItem', item, 'index', index)
         const onLongPress: (event: GestureResponderEvent) => void = () => handleLongPress(item)
         const onPress: (event: GestureResponderEvent) => void = () => handlePress(data)
         return (
             <TouchableOpacity
-            style={currentItemIndex !== index ? styles.textContainer : styles.textContainerActive}
+            style={currentElement && currentElement.phone !== item?.phone? styles.textContainer : styles.textContainerActive}
             onLongPress={onLongPress}
             onPress={onPress}>
                 <View style={styles.nameLine}>
@@ -47,22 +55,24 @@ const ContactList = (props: IContactListProps) => {
                 </View>
                 <Text style={styles.text}>{item?.email}</Text>
                 <View style={styles.nameLine}>
-                    <Text style={styles.text}>DB + Data</Text>
+                    <Text style={styles.text}>DB + {item?.date}</Text>
                     <Text style={styles.text}>Calling Status</Text>
                 </View>
             </TouchableOpacity>
         )
     }
     const keyExtractor = (item: IDataItem) => item?.phone
-    console.log('callData', callData)
+
+
     return (
         <>
             <View style={styles.container}>
                 {
                     callData && callData.length > 0 && <FlatList
                     keyExtractor={keyExtractor}
-                    data={callData}
-                    renderItem={renderItem} />
+                    data={renderData}
+                    renderItem={renderItem}
+                    />
                 }
 
             </View>

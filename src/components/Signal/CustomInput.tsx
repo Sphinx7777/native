@@ -1,31 +1,35 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, Button, TextInput } from 'react-native';
 import { IDataItem } from './index';
 
 
 interface ICustomInputProps {
-    currentElement: IDataItem | null;
+    currentElement: IDataItem | undefined;
 }
 interface ICustomInputState {
-    description: string;
+    date: string | undefined;
 }
 const CustomInput = (props: ICustomInputProps) => {
     const { currentElement } = props;
+    console.log('currentElement', currentElement)
 
     const [state, setState] = useState<ICustomInputState>({
-        description: ''
+        date: ''
     })
 
     const handlePress = () => {
         console.log('handlePress', state)
     }
 
+    useEffect(() => {
+        setState({date: currentElement && currentElement.date})
+    }, [currentElement && currentElement.date])
+
     const handleClearPress = () => {
         setState((prevState) => {
             return {
                 ...prevState,
-                name: '',
-                description: ''
+                date: ''
             }
         })
     }
@@ -34,12 +38,12 @@ const CustomInput = (props: ICustomInputProps) => {
         setState((prevState) => {
             return {
                 ...prevState,
-                description: data
+                date: data
             }
         })
     }
-    const nameDisabled = state?.description?.length === 0
-
+    const nameDisabled = state?.date?.length === 0
+    console.log('state', state)
     return (
         <>
 
@@ -50,12 +54,16 @@ const CustomInput = (props: ICustomInputProps) => {
                     <Text style={styles.text}>{currentElement?.phone}</Text>
                     <Text style={styles.text}>DB_Type</Text>
                 </View>
+                <View style={styles.nameLine}>
                 <Text style={styles.text}>{currentElement?.email}</Text>
+                <Text style={styles.text}>{currentElement?.date}</Text>
+                </View>
+                
             </View>
                 <TextInput
                     style={styles.textInput}
-                    placeholder='enter description'
-                    value={state.description}
+                    placeholder='enter date'
+                    value={state.date}
                     onChangeText={handleDescChange}
                     multiline={true}
                 />

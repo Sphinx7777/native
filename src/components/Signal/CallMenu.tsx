@@ -8,12 +8,13 @@ interface ICallMenuProps {
     currentItemIndex: number;
     callData: IDataItem[] | undefined;
     makeCall: (number: string) => any;
+    setCurrentElement: (currentElement: IDataItem) => void;
 }
 
 interface ICallMenuState {
 }
 const CallMenu = (props: ICallMenuProps) => {
-    const { setCurrentItemIndex, currentItemIndex, callData, makeCall } = props;
+    const { setCurrentItemIndex, currentItemIndex, callData, makeCall, setCurrentElement} = props;
 
     const [state, setState] = useState<ICallMenuState>({
 
@@ -21,8 +22,15 @@ const CallMenu = (props: ICallMenuProps) => {
 
     const handleNextPress = () => {
         if (callData && currentItemIndex < callData?.length - 1) {
+            makeCall(callData[currentItemIndex].phone)
             setCurrentItemIndex(currentItemIndex + 1)
+            setCurrentElement(callData[currentItemIndex])
         } else {
+            if (callData) {
+                const index = callData?.length - 1
+                makeCall(callData[index].phone)
+                setCurrentElement(callData[index])
+            }
             setCurrentItemIndex(0)
         }
     }

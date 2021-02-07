@@ -12,7 +12,6 @@ const initialState = {
 
 
 const dataSignal = (state = initialState, action: any) => {
-    console.log('dataSignal', action)
     switch (action.type) {
         case IReducerTypes.SET_DATA:
             return {
