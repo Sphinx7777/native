@@ -1,8 +1,6 @@
 
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, ScrollView, FlatList, TouchableOpacity, GestureResponderEvent } from 'react-native';
-// @ts-ignore
-import call from 'react-native-phone-call'
 import { IDataItem } from './index';
 
 
@@ -10,29 +8,18 @@ interface IContactListProps {
     callData: IDataItem[] | undefined;
     setCurrentItemIndex: (currentItem: number) => void;
     currentItemIndex: number;
+    makeCall: (number: string) => any;
 }
 
 interface IContactListState {
 
 }
 const ContactList = (props: IContactListProps) => {
-    const { callData, setCurrentItemIndex, currentItemIndex } = props;
+    const { callData, setCurrentItemIndex, currentItemIndex, makeCall } = props;
 
     const [state, setState] = useState<IContactListState>({
 
     })
-
-    const makeCall = async (number?: string) => {
-        const args = {
-            number,
-            prompt: false
-        }
-        return call(args)
-            .then((r: any) => console.log('makeCall_start', r))
-            .catch((err: any) => {
-                console.error(err)
-            })
-    }
 
     const handleLongPress = (item: IDataItem) => {
         const { name, email, phone } = item

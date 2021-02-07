@@ -7,14 +7,12 @@ interface ICustomInputProps {
     currentElement: IDataItem | null;
 }
 interface ICustomInputState {
-    name: string;
     description: string;
 }
 const CustomInput = (props: ICustomInputProps) => {
     const { currentElement } = props;
 
     const [state, setState] = useState<ICustomInputState>({
-        name: '',
         description: ''
     })
 
@@ -31,14 +29,6 @@ const CustomInput = (props: ICustomInputProps) => {
             }
         })
     }
-    const handleNameChange = (data: string) => {
-        setState((prevState) => {
-            return {
-                ...prevState,
-                name: data
-            }
-        })
-    }
 
     const handleDescChange = (data: string) => {
         setState((prevState) => {
@@ -48,7 +38,7 @@ const CustomInput = (props: ICustomInputProps) => {
             }
         })
     }
-    const nameDisabled = state?.name?.length === 0 || state?.description?.length === 0
+    const nameDisabled = state?.description?.length === 0
 
     return (
         <>
@@ -62,13 +52,6 @@ const CustomInput = (props: ICustomInputProps) => {
                 </View>
                 <Text style={styles.text}>{currentElement?.email}</Text>
             </View>
-                <TextInput
-                    style={styles.textInput}
-                    placeholder='enter name'
-                    value={state.name}
-                    onChangeText={handleNameChange}
-                    multiline={true}
-                />
                 <TextInput
                     style={styles.textInput}
                     placeholder='enter description'
@@ -105,7 +88,7 @@ const styles = StyleSheet.create({
         display: 'flex',
         flexDirection: 'column',
         width: '100%',
-        minHeight: 220,
+        minHeight: 235,
         borderColor: '#29a331',
         backgroundColor: '#c9f2cf',
         borderWidth: 2,

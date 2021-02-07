@@ -6,6 +6,8 @@ import { connect, useDispatch } from 'react-redux';
 import ContactList from './ContactList';
 import CallMenu from './CallMenu';
 import CustomInput from './CustomInput';
+// @ts-ignore
+import call from 'react-native-phone-call'
 
 const data = [
     {
@@ -67,13 +69,29 @@ const Signal = (props: IAppProps) => {
         const res = await fetch(`http://neologic.golden-team.org/api/page/url/services`,
         )
         const response: any = await res.json()
-        dispatch({type: 'SET_DATA', payload: {dataItems: data}})
+        dispatch({ type: 'SET_DATA', payload: { dataItems: data } })
         setState((prevState) => {
             return {
                 ...prevState,
                 response,
             }
         })
+    }
+
+    const makeCall = async (number?: string) => {
+        const args = {
+            number,
+            prompt: false
+        }
+        return call(args)
+            .then((r: any) => {
+                console.log('makeCall_start', r)
+                return r;
+            })
+            .catch((err: any) => {
+                console.error('makeCall_ERROR', err)
+                return err
+            })
     }
 
     const setCurrentItemIndex = (currentItemIndex: number) => {
@@ -93,41 +111,52 @@ const Signal = (props: IAppProps) => {
     const { currentItemIndex } = state
     return (
 
-        <View style={styles.container}>
-            <StatusBar style="auto" backgroundColor='silver' />
-            <ContactList
-                currentItemIndex={currentItemIndex}
-                callData={dataItems}
-                setCurrentItemIndex={setCurrentItemIndex} />
-            <CustomInput currentElement={currentElement} />
-            <CallMenu
-                setCurrentItemIndex={setCurrentItemIndex}
-                currentItemIndex={currentItemIndex}
-                callData={dataItems} />
-        </View>
+
+
+        <ScrollView style={styles.container}>
+            <View style={styles.viewContainer}>
+                <StatusBar style="auto" backgroundColor='silver' />
+                <ContactList
+                    currentItemIndex={currentItemIndex}
+                    callData={dataItems}
+                    setCurrentItemIndex={setCurrentItemIndex}
+                    makeCall={makeCall}
+                    />
+
+                <CustomInput currentElement={currentElement} />
+                <CallMenu
+                    setCurrentItemIndex={setCurrentItemIndex}
+                    currentItemIndex={currentItemIndex}
+                    callData={dataItems}
+                    makeCall={makeCall}
+                    />
+            </View>
+
+        </ScrollView>
+
 
 
     );
 }
 
 const styles = StyleSheet.create({
-    container: {
+    viewContainer: {
         backgroundColor: '#d7dbd7',
         paddingHorizontal: 5,
         paddingTop: 30,
-    },
-    text: {
 
+    },
+    container: {
+        height: 1000
     }
 });
 
 const mapStateToProps = (state: any, props: any) => {
-    console.log('mapStateToProps', state, 'props', props)
-const { dataSignal: { dataItems }, identity: { user }} = state;
+    const { dataSignal: { dataItems }, identity: { user } } = state;
     return {
-        dataItems: dataItems || [],
+        dataItems,
         user
     };
-} 
+}
 
 export default connect(mapStateToProps, {})(Signal)

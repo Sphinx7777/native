@@ -1,18 +1,19 @@
 
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, ScrollView} from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, ScrollView } from 'react-native';
 import { IDataItem } from './index';
 
 interface ICallMenuProps {
     setCurrentItemIndex: (currentItemIndex: number) => void;
     currentItemIndex: number;
     callData: IDataItem[] | undefined;
+    makeCall: (number: string) => any;
 }
 
 interface ICallMenuState {
 }
 const CallMenu = (props: ICallMenuProps) => {
-    const {setCurrentItemIndex, currentItemIndex, callData} = props;
+    const { setCurrentItemIndex, currentItemIndex, callData, makeCall } = props;
 
     const [state, setState] = useState<ICallMenuState>({
 
@@ -21,9 +22,9 @@ const CallMenu = (props: ICallMenuProps) => {
     const handleNextPress = () => {
         if (callData && currentItemIndex < callData?.length - 1) {
             setCurrentItemIndex(currentItemIndex + 1)
-        }else {
+        } else {
             setCurrentItemIndex(0)
-        }      
+        }
     }
 
     const handlePausePress = () => {
@@ -51,7 +52,7 @@ const CallMenu = (props: ICallMenuProps) => {
                 </View>
                 <View style={styles.buttonsBlock}>
                     <TouchableOpacity
-                        style={{...styles.button, }}
+                        style={{ ...styles.button, }}
                         onPress={handlePausePress}
                     >
                         <Text style={styles.buttonText}>Pause</Text>
@@ -97,7 +98,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         width: '100%',
         marginTop: 5,
-        height: 110,
+        minHeight: 140,
         borderColor: '#a5a8a5',
         backgroundColor: '#f7faf7',
         borderWidth: 2,
