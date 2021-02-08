@@ -76,9 +76,9 @@ const CustomInput = (props: ICustomInputProps) => {
         })
     }
     const submit = () => {
-        
-        dispatch({type: 'CHANGE_DATA', payload: {...currentElement, date: state.date, comment: state.comment}})
-        console.log('submit', {...currentElement, date: state.date, comment: state.comment})
+
+        dispatch({ type: 'CHANGE_DATA', payload: { ...currentElement, date: state.date, comment: state.comment } })
+        console.log('submit', { ...currentElement, date: state.date, comment: state.comment })
     }
 
     const cancelCommentDis = currentElement && currentElement.comment === state.comment
@@ -88,68 +88,74 @@ const CustomInput = (props: ICustomInputProps) => {
         <>
 
             <View style={styles.container}>
-                {currentElement && <TouchableOpacity 
-            onLongPress={calling}
-            style={styles.textContainer}>
-                <View style={styles.nameLine}>
-                    <Text style={styles.text}>{currentElement?.name}</Text>
-                    <Text style={styles.text}>{currentElement?.phone}</Text>
-                    <Text style={styles.text}>{currentElement?.dbType}</Text>
+                {currentElement && <TouchableOpacity
+                    onLongPress={calling}
+                    style={styles.textContainer}>
+                    <View style={styles.nameLine}>
+                        <Text style={styles.text}>{currentElement?.name}</Text>
+                        <Text style={styles.text}>{currentElement?.phone}</Text>
+                        <Text style={styles.text}>{currentElement?.dbType}</Text>
+                    </View>
+                    <View style={styles.nameLine}>
+                        <Text style={styles.text}>{currentElement?.email}</Text>
+                    </View>
+                    <View style={styles.nameLine}>
+                        <Text style={styles.text}>{currentElement?.date}</Text>
+                        <Text style={styles.text}>Calling Status</Text>
+                    </View>
+
+                </TouchableOpacity>}
+
+                <View style={styles.inputContainer}>
+                    <TextInput
+                        style={styles.textInput}
+                        placeholder='enter date'
+                        value={state.date}
+                        onChangeText={handleDateChange}
+                    />
+                    <View style={styles.buttons}>
+                        <TouchableOpacity
+                            style={!cancelDateDis
+                                ? styles.button
+                                : { ...styles.button, backgroundColor: 'gray', borderColor: 'gray' }}
+                            disabled={cancelDateDis}
+                            onPress={cancelDate}>
+                            <Text style={styles.buttonText}>Cancel</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            style={styles.button}
+                            onPress={addNewDate}>
+                            <Text style={styles.buttonText}>Set date</Text>
+                        </TouchableOpacity>
+                    </View>
                 </View>
-                <View style={styles.nameLine}>
-                <Text style={styles.text}>{currentElement?.email}</Text>
+                <View style={styles.inputContainer}>
+                    <TextInput
+                        style={styles.textInput}
+                        placeholder='enter comment'
+                        value={state.comment}
+                        onChangeText={handleCommentChange}
+                        multiline={true}
+                    />
+                    <View style={styles.buttons}>
+                        <TouchableOpacity
+                            style={!cancelCommentDis
+                                ? styles.button
+                                : { ...styles.button, backgroundColor: 'gray', borderColor: 'gray' }}
+                            disabled={cancelCommentDis}
+                            onPress={cancelComment}>
+                            <Text style={styles.buttonText}>Cancel</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            style={(!cancelCommentDis || !cancelDateDis)
+                                ? styles.button
+                                : { ...styles.sendButton, backgroundColor: 'gray', borderColor: 'gray' }}
+                            disabled={(cancelDateDis && cancelCommentDis)}
+                            onPress={submit}>
+                            <Text style={styles.buttonText}> Submit </Text>
+                        </TouchableOpacity>
+                    </View>
                 </View>
-                <View style={styles.nameLine}>
-                    <Text style={styles.text}>{currentElement?.date}</Text>
-                    <Text style={styles.text}>Calling Status</Text>
-                </View>
-                
-            </TouchableOpacity>}
-            
-            <View style={styles.inputContainer}>
-            <TextInput
-                    style={styles.textInput}
-                    placeholder='enter date'
-                    value={state.date}
-                    onChangeText={handleDateChange}
-                />
-                <View style={styles.buttons}>
-                <TouchableOpacity
-                style={!cancelDateDis ? styles.button : {...styles.button, backgroundColor: 'gray', borderColor: 'gray'}}
-                        disabled={cancelDateDis}
-                        onPress={cancelDate}>
-                        <Text style={styles.buttonText}>Cancel</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        style={styles.button}
-                        onPress={addNewDate}>
-                        <Text style={styles.buttonText}>Set date</Text>
-                    </TouchableOpacity>
-                </View>
-            </View>
-            <View style={styles.inputContainer}>
-            <TextInput
-                    style={styles.textInput}
-                    placeholder='enter comment'
-                    value={state.comment}
-                    onChangeText={handleCommentChange}
-                    multiline={true}
-                />
-                <View style={styles.buttons}>
-                    <TouchableOpacity
-                        style={!cancelCommentDis ? styles.button : {...styles.button, backgroundColor: 'gray', borderColor: 'gray'}}
-                        disabled={cancelCommentDis}
-                        onPress={cancelComment}>
-                        <Text style={styles.buttonText}>Cancel</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        style={(!cancelCommentDis || !cancelDateDis) ? styles.button : {...styles.sendButton, backgroundColor: 'gray', borderColor: 'gray'} }
-                        disabled={(cancelDateDis && cancelCommentDis)}
-                        onPress={submit}>
-                        <Text style={styles.buttonText}> Submit </Text>
-                    </TouchableOpacity>
-                </View>
-            </View>
             </View>
         </>
     );
