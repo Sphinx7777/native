@@ -11,7 +11,6 @@ interface ICustomInputState {
 }
 const CustomInput = (props: ICustomInputProps) => {
     const { currentElement } = props;
-    console.log('currentElement', currentElement)
 
     const [state, setState] = useState<ICustomInputState>({
         date: ''
@@ -43,7 +42,6 @@ const CustomInput = (props: ICustomInputProps) => {
         })
     }
     const nameDisabled = state?.date?.length === 0
-    console.log('state', state)
     return (
         <>
 
@@ -57,6 +55,10 @@ const CustomInput = (props: ICustomInputProps) => {
                 <View style={styles.nameLine}>
                 <Text style={styles.text}>{currentElement?.email}</Text>
                 <Text style={styles.text}>{currentElement?.date}</Text>
+                </View>
+                <View style={styles.nameLine}>
+                    <Text style={styles.text}>DB + {currentElement?.date}</Text>
+                    <Text style={styles.text}>Calling Status</Text>
                 </View>
                 
             </View>
@@ -105,15 +107,23 @@ const styles = StyleSheet.create({
         borderRadius: 10
     },
     textContainer: {
+        borderStyle: 'solid',
+        borderColor: '#1b6b2f',
+        borderWidth: 2,
         marginBottom: 10,
-        width: '90%',
-        marginLeft: 'auto',
-        marginRight: 'auto',
+        backgroundColor: '#97cca5',
+        padding: 5,
+        width: '100%',
+        borderRadius: 10,
+        // marginBottom: 10,
+        // width: '90%',
+        // marginLeft: 'auto',
+        // marginRight: 'auto',
     },
     nameLine: {
         display: 'flex',
         flexDirection: 'row',
-        width: '90%',
+        width: '100%',
         alignItems: 'center',
         justifyContent: 'space-between'
     },

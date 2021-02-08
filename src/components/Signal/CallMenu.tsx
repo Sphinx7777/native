@@ -22,14 +22,15 @@ const CallMenu = (props: ICallMenuProps) => {
 
     const handleNextPress = () => {
         if (callData && currentItemIndex < callData?.length - 1) {
-            makeCall(callData[currentItemIndex].phone)
+            makeCall(callData[currentItemIndex + 1].phone)
             setCurrentItemIndex(currentItemIndex + 1)
-            setCurrentElement(callData[currentItemIndex])
+            setCurrentElement(callData[currentItemIndex + 1])
         } else {
             if (callData) {
                 const index = callData?.length - 1
-                makeCall(callData[index].phone)
-                setCurrentElement(callData[index])
+                makeCall(callData[0].phone)
+                setCurrentItemIndex(0 )
+                setCurrentElement(callData[0])
             }
             setCurrentItemIndex(0)
         }
@@ -71,7 +72,7 @@ const CallMenu = (props: ICallMenuProps) => {
                         style={styles.button}
                         onPress={handleNextPress}
                     >
-                        <Text style={styles.buttonText}>Next</Text>
+                        <Text style={styles.buttonText}>Next call</Text>
                     </TouchableOpacity>
                 </View>
 

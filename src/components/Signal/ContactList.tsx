@@ -22,11 +22,6 @@ const ContactList = (props: IContactListProps) => {
     const [state, setState] = useState<IContactListState>({
 
     })
-    console.log('currentItemIndex', currentItemIndex, 'currentElement', currentElement)
-
-    let renderData = callData
-    const temp = callData && callData.slice(currentItemIndex)
-    renderData = temp && callData && [...new Set([...temp,...callData])]
 
     const handleLongPress = (item: IDataItem) => {
         const { name, email, phone } = item
@@ -36,16 +31,16 @@ const ContactList = (props: IContactListProps) => {
     const handlePress = (data: any) => {
         const { separators, item, index } = data
         setCurrentElement(item)
+        setCurrentItemIndex(index)
     }
 
     const renderItem = (data: any) => {
         const { item, index } = data
-        //console.log('renderItem', item, 'index', index)
         const onLongPress: (event: GestureResponderEvent) => void = () => handleLongPress(item)
         const onPress: (event: GestureResponderEvent) => void = () => handlePress(data)
         return (
             <TouchableOpacity
-            style={currentElement && currentElement.phone !== item?.phone? styles.textContainer : styles.textContainerActive}
+            style={currentItemIndex !== index ? styles.textContainer : styles.textContainerActive}
             onLongPress={onLongPress}
             onPress={onPress}>
                 <View style={styles.nameLine}>
@@ -70,7 +65,7 @@ const ContactList = (props: IContactListProps) => {
                 {
                     callData && callData.length > 0 && <FlatList
                     keyExtractor={keyExtractor}
-                    data={renderData}
+                    data={callData}
                     renderItem={renderItem}
                     />
                 }
