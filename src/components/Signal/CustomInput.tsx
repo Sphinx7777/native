@@ -1,39 +1,56 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, Button, TextInput } from 'react-native';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-native';
+import { getStringDate } from '../../utils';
 import { IDataItem } from './index';
 
 
 interface ICustomInputProps {
     currentElement: IDataItem | undefined;
+    makeCall: (number: string) => any;
 }
 interface ICustomInputState {
-    date: string | undefined;
+    date: string;
+    comment: string | undefined;
 }
 const CustomInput = (props: ICustomInputProps) => {
-    const { currentElement } = props;
+    const { currentElement, makeCall } = props;
 
     const [state, setState] = useState<ICustomInputState>({
-        date: ''
+        date: currentElement ? currentElement.date : '',
+        comment: currentElement && currentElement.comment ? currentElement.comment : ''
     })
 
-    const handlePress = () => {
-        console.log('handlePress', state)
-    }
-
-    useEffect(() => {
-        setState({date: currentElement && currentElement.date})
-    }, [currentElement && currentElement.date])
-
-    const handleClearPress = () => {
+    const cancelDate = () => {
         setState((prevState) => {
             return {
                 ...prevState,
-                date: ''
+                date: currentElement ? currentElement.date : ''
             }
         })
     }
 
-    const handleDescChange = (data: string) => {
+    useEffect(() => {
+        setState((prevState) => {
+            return {
+                ...prevState,
+                date: currentElement && currentElement.date ? currentElement.date : '',
+                comment: currentElement && currentElement.comment ? currentElement.comment : ''
+            }
+        })
+    }, [currentElement && currentElement.date, currentElement && currentElement.comment])
+
+    const addNewDate = () => {
+        setState((prevState) => {
+            return {
+                ...prevState,
+                date: getStringDate(new Date())
+            }
+        })
+    }
+
+    const calling = () => currentElement && makeCall(currentElement?.phone)
+
+    const handleDateChange = (data: string) => {
         setState((prevState) => {
             return {
                 ...prevState,
@@ -41,53 +58,87 @@ const CustomInput = (props: ICustomInputProps) => {
             }
         })
     }
-    const nameDisabled = state?.date?.length === 0
+    const handleCommentChange = (comment: string) => {
+        setState((prevState) => {
+            return {
+                ...prevState,
+                comment
+            }
+        })
+    }
+    const cancelComment = () => {
+        setState((prevState) => {
+            return {
+                ...prevState,
+                comment: currentElement ? currentElement.comment : ''
+            }
+        })
+    }
+    const submit = () => console.log('submit', state)
+
     return (
         <>
 
             <View style={styles.container}>
-            <View style={styles.textContainer}>
+                {currentElement && <TouchableOpacity 
+            onLongPress={calling}
+            style={styles.textContainer}>
                 <View style={styles.nameLine}>
                     <Text style={styles.text}>{currentElement?.name}</Text>
                     <Text style={styles.text}>{currentElement?.phone}</Text>
-                    <Text style={styles.text}>DB_Type</Text>
+                    <Text style={styles.text}>{currentElement?.dbType}</Text>
                 </View>
                 <View style={styles.nameLine}>
                 <Text style={styles.text}>{currentElement?.email}</Text>
-                <Text style={styles.text}>{currentElement?.date}</Text>
                 </View>
                 <View style={styles.nameLine}>
-                    <Text style={styles.text}>DB + {currentElement?.date}</Text>
+                    <Text style={styles.text}>{currentElement?.date}</Text>
                     <Text style={styles.text}>Calling Status</Text>
                 </View>
                 
-            </View>
-                <TextInput
+            </TouchableOpacity>}
+            
+            <View style={styles.inputContainer}>
+            <TextInput
                     style={styles.textInput}
                     placeholder='enter date'
                     value={state.date}
-                    onChangeText={handleDescChange}
+                    onChangeText={handleDateChange}
+                />
+                <View style={styles.buttons}>
+                <TouchableOpacity
+                        style={styles.button}
+                        onPress={cancelDate}>
+                        <Text style={styles.buttonText}>Cancel</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        style={styles.button}
+                        onPress={addNewDate}>
+                        <Text style={styles.buttonText}>Set date</Text>
+                    </TouchableOpacity>
+                </View>
+            </View>
+            <View style={styles.inputContainer}>
+            <TextInput
+                    style={styles.textInput}
+                    placeholder='enter comment'
+                    value={state.comment}
+                    onChangeText={handleCommentChange}
                     multiline={true}
                 />
                 <View style={styles.buttons}>
-                    <View style={styles.sendButton}>
-                        <Button
-                            disabled={nameDisabled}
-                            title='Send'
-                            color='blue'
-                            onPress={handlePress}
-                        />
-                    </View>
-                    <View style={styles.clearButton}>
-                    <Button
-                        disabled={nameDisabled}
-                        title='Clear'
-                        color='blue'
-                        onPress={handleClearPress}
-                    />
-                    </View>
-
+                    <TouchableOpacity
+                        style={styles.button}
+                        onPress={cancelComment}>
+                        <Text style={styles.buttonText}>Cancel</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        style={styles.sendButton}
+                        onPress={submit}>
+                        <Text style={styles.buttonText}> Submit </Text>
+                    </TouchableOpacity>
                 </View>
+            </View>
             </View>
         </>
     );
@@ -98,7 +149,7 @@ const styles = StyleSheet.create({
         display: 'flex',
         flexDirection: 'column',
         width: '100%',
-        minHeight: 235,
+        minHeight: 210,
         borderColor: '#29a331',
         backgroundColor: '#c9f2cf',
         borderWidth: 2,
@@ -106,19 +157,22 @@ const styles = StyleSheet.create({
         paddingTop: 10,
         borderRadius: 10
     },
+    inputContainer: {
+        display: 'flex',
+        width: '100%',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        flexDirection: 'row',
+    },
     textContainer: {
         borderStyle: 'solid',
         borderColor: '#1b6b2f',
         borderWidth: 2,
         marginBottom: 10,
         backgroundColor: '#97cca5',
-        padding: 5,
+        padding: 1,
         width: '100%',
         borderRadius: 10,
-        // marginBottom: 10,
-        // width: '90%',
-        // marginLeft: 'auto',
-        // marginRight: 'auto',
     },
     nameLine: {
         display: 'flex',
@@ -135,23 +189,45 @@ const styles = StyleSheet.create({
         borderStyle: 'solid',
         borderBottomWidth: 1,
         borderBottomColor: 'lightgrey',
-        paddingVertical: 10,
-        width: '98%',
+        paddingVertical: 5,
+        width: '50%',
     },
     buttons: {
         display: 'flex',
         flexDirection: 'row',
-        width: '100%',
+        width: '50%',
         justifyContent: 'flex-end',
         paddingRight: 10,
-        marginTop: 10,
+        marginTop: 5,
         borderRadius: 10
     },
-    sendButton: {
-       
+    button: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderWidth: 2,
+        borderColor: 'blue',
+        paddingHorizontal: 10,
+        borderRadius: 10,
+        overflow: 'hidden',
+        backgroundColor: '#0d3ea6',
+        marginLeft: 10,
     },
-    clearButton: {
-        marginLeft: 15,
+    buttonText: {
+        color: 'white',
+        fontSize: 18
+    },
+    sendButton: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderWidth: 2,
+        borderColor: 'blue',
+        paddingHorizontal: 10,
+        borderRadius: 10,
+        overflow: 'hidden',
+        backgroundColor: '#0d3ea6',
+        marginLeft: 10,
     }
 });
 

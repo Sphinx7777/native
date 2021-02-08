@@ -2,7 +2,8 @@ import { combineReducers } from 'redux';
 
 enum IReducerTypes {
     SET_DATA = 'SET_DATA',
-    SET_USER = 'SET_USER'
+    SET_USER = 'SET_USER',
+    CHANGE_DATA = 'CHANGE_DATA'
 } 
 
 

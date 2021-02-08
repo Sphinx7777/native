@@ -7,48 +7,52 @@ interface ICallMenuProps {
     setCurrentItemIndex: (currentItemIndex: number) => void;
     currentItemIndex: number;
     callData: IDataItem[] | undefined;
-    makeCall: (number: string) => any;
+    makeCall: (number: string) => Promise<any>;
     setCurrentElement: (currentElement: IDataItem) => void;
 }
 
 interface ICallMenuState {
+    callStart: boolean;
 }
 const CallMenu = (props: ICallMenuProps) => {
     const { setCurrentItemIndex, currentItemIndex, callData, makeCall, setCurrentElement} = props;
 
     const [state, setState] = useState<ICallMenuState>({
-
+        callStart: false
     })
 
-    const handleNextPress = () => {
+    const handleNextPress = async () => {
         if (callData && currentItemIndex < callData?.length - 1) {
-            makeCall(callData[currentItemIndex + 1].phone)
-            setCurrentItemIndex(currentItemIndex + 1)
-            setCurrentElement(callData[currentItemIndex + 1])
+            const res = await makeCall(callData[currentItemIndex + 1].phone)
+            if (res) {
+                setState((prevState) => {
+                    return {
+                        ...prevState,
+                        callStart: res
+                    }
+                })
+                setCurrentItemIndex(currentItemIndex + 1)
+                setCurrentElement(callData[currentItemIndex + 1])
+            }
         } else {
             if (callData) {
                 const index = callData?.length - 1
-                makeCall(callData[0].phone)
-                setCurrentItemIndex(0 )
-                setCurrentElement(callData[0])
+                const res = await makeCall(callData[0].phone)
+                if (res) {
+                    setState((prevState) => {
+                        return {
+                            ...prevState,
+                            callStart: res
+                        }
+                    })
+                    setCurrentItemIndex(0)
+                    setCurrentElement(callData[0])
+                }
             }
-            setCurrentItemIndex(0)
         }
     }
 
-    const handlePausePress = () => {
-        console.log('handlePausePress')
-    }
-
-    // const handleClearPress = () => {
-    //     setState((prevState) => {
-    //         return {
-    //             ...prevState,
-    //             name: '',
-    //             description: ''
-    //         }
-    //     })
-    // }
+    const handlePausePress = () => console.log('handlePausePress')
 
     return (
         <>
@@ -61,7 +65,7 @@ const CallMenu = (props: ICallMenuProps) => {
                 </View>
                 <View style={styles.buttonsBlock}>
                     <TouchableOpacity
-                        style={{ ...styles.button, }}
+                        style={{...styles.button, marginBottom: 15}}
                         onPress={handlePausePress}
                     >
                         <Text style={styles.buttonText}>Pause</Text>
@@ -69,7 +73,7 @@ const CallMenu = (props: ICallMenuProps) => {
 
 
                     <TouchableOpacity
-                        style={styles.button}
+                        style={{...styles.button, marginTop: 15, paddingVertical: 7}}
                         onPress={handleNextPress}
                     >
                         <Text style={styles.buttonText}>Next call</Text>
@@ -90,11 +94,10 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         borderWidth: 2,
         borderColor: 'blue',
-        padding: 5,
+        paddingHorizontal: 10,
         borderRadius: 10,
         overflow: 'hidden',
-        backgroundColor: '#0d3ea6',
-        marginVertical: 5
+        backgroundColor: '#0d3ea6',      
     },
     buttonText: {
         color: 'white',
@@ -107,7 +110,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         width: '100%',
         marginTop: 5,
-        minHeight: 140,
+        minHeight: 120,
         borderColor: '#a5a8a5',
         backgroundColor: '#f7faf7',
         borderWidth: 2,
@@ -116,26 +119,15 @@ const styles = StyleSheet.create({
     },
     textBlock: {
         display: 'flex',
-        width: '60%',
+        width: '65%',
         padding: 5,
     },
     buttonsBlock: {
         display: 'flex',
-        width: '40%',
+        width: '35%',
         padding: 5,
 
     },
-    pauseButton: {
-        marginRight: 5,
-        borderWidth: 1,
-        borderRadius: 5,
-        overflow: 'hidden'
-    },
-    startButton: {
-        borderWidth: 1,
-        borderRadius: 5,
-        overflow: 'hidden'
-    }
 });
 
 

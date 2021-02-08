@@ -8,24 +8,34 @@ interface IContactListProps {
     callData: IDataItem[] | undefined;
     setCurrentItemIndex: (currentItem: number) => void;
     currentItemIndex: number;
-    makeCall: (number: string) => any;
+    makeCall: (number: string) => Promise<any>;
     setCurrentElement: (currentElement: IDataItem) => void;
     currentElement: IDataItem | undefined;
 }
 
 interface IContactListState {
-
+    callStart: boolean;
 }
 const ContactList = (props: IContactListProps) => {
     const { callData, setCurrentItemIndex, currentItemIndex, makeCall, setCurrentElement, currentElement} = props;
 
     const [state, setState] = useState<IContactListState>({
-
+        callStart: false
     })
 
-    const handleLongPress = (item: IDataItem) => {
-        const { name, email, phone } = item
-        makeCall(phone)
+    const handleLongPress = async (data: any) => {
+        const { separators, item, index } = data
+        const res = await makeCall(item.phone)
+        if (res) {
+            setState((prevState) => {
+                return {
+                    ...prevState,
+                    callStart: res
+                }
+            })
+            setCurrentElement(item)
+            setCurrentItemIndex(index)
+        }
     }
 
     const handlePress = (data: any) => {
@@ -36,7 +46,7 @@ const ContactList = (props: IContactListProps) => {
 
     const renderItem = (data: any) => {
         const { item, index } = data
-        const onLongPress: (event: GestureResponderEvent) => void = () => handleLongPress(item)
+        const onLongPress: (event: GestureResponderEvent) => void = () => handleLongPress(data)
         const onPress: (event: GestureResponderEvent) => void = () => handlePress(data)
         return (
             <TouchableOpacity
@@ -46,11 +56,11 @@ const ContactList = (props: IContactListProps) => {
                 <View style={styles.nameLine}>
                     <Text style={styles.text}>{item?.name}</Text>
                     <Text style={styles.text}>{item?.phone}</Text>
-                    <Text style={styles.text}>DB_Type</Text>
+                    <Text style={styles.text}>{item?.dbType}</Text>
                 </View>
                 <Text style={styles.text}>{item?.email}</Text>
                 <View style={styles.nameLine}>
-                    <Text style={styles.text}>DB + {item?.date}</Text>
+                    <Text style={styles.text}>{item?.date}</Text>
                     <Text style={styles.text}>Calling Status</Text>
                 </View>
             </TouchableOpacity>
