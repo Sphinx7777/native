@@ -65,7 +65,7 @@ const CallMenu = (props: ICallMenuProps) => {
                 </View>
                 <View style={styles.buttonsBlock}>
                     <TouchableOpacity
-                        style={{...styles.button, marginBottom: 15}}
+                        style={{...styles.button, marginTop: 1, marginBottom: 5}}
                         onPress={handlePausePress}
                     >
                         <Text style={styles.buttonText}>Pause</Text>
@@ -73,7 +73,7 @@ const CallMenu = (props: ICallMenuProps) => {
 
 
                     <TouchableOpacity
-                        style={{...styles.button, marginTop: 15, paddingVertical: 7}}
+                        style={{...styles.button, marginBottom: 1,marginTop: 5, paddingVertical: 7}}
                         onPress={handleNextPress}
                     >
                         <Text style={styles.buttonText}>Next call</Text>
@@ -110,7 +110,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         width: '100%',
         marginTop: 5,
-        minHeight: 120,
+        height: 100,
         borderColor: '#a5a8a5',
         backgroundColor: '#f7faf7',
         borderWidth: 2,
@@ -120,12 +120,10 @@ const styles = StyleSheet.create({
     textBlock: {
         display: 'flex',
         width: '65%',
-        padding: 5,
     },
     buttonsBlock: {
         display: 'flex',
         width: '35%',
-        padding: 5,
 
     },
 });

@@ -11,14 +11,14 @@ interface ICustomInputProps {
 }
 interface ICustomInputState {
     date: string;
-    comment: string | undefined;
+    details: string | undefined;
 }
 const CustomInput = (props: ICustomInputProps) => {
     const { currentElement, makeCall, dispatch } = props;
 
     const [state, setState] = useState<ICustomInputState>({
         date: currentElement ? currentElement.date : '',
-        comment: currentElement && currentElement.comment ? currentElement.comment : ''
+        details: currentElement && currentElement.details ? currentElement.details : ''
     })
 
     const cancelDate = () => {
@@ -35,10 +35,10 @@ const CustomInput = (props: ICustomInputProps) => {
             return {
                 ...prevState,
                 date: currentElement && currentElement.date ? currentElement.date : '',
-                comment: currentElement && currentElement.comment ? currentElement.comment : ''
+                details: currentElement && currentElement.details ? currentElement.details : ''
             }
         })
-    }, [currentElement && currentElement.date, currentElement && currentElement.comment])
+    }, [currentElement && currentElement.date, currentElement && currentElement.details])
 
     const addNewDate = () => {
         setState((prevState) => {
@@ -59,29 +59,29 @@ const CustomInput = (props: ICustomInputProps) => {
             }
         })
     }
-    const handleCommentChange = (comment: string) => {
+    const handleDetailsChange = (details: string) => {
         setState((prevState) => {
             return {
                 ...prevState,
-                comment
+                details
             }
         })
     }
-    const cancelComment = () => {
+    const cancelDetails = () => {
         setState((prevState) => {
             return {
                 ...prevState,
-                comment: currentElement ? currentElement.comment : ''
+                details: currentElement ? currentElement.details : ''
             }
         })
     }
     const submit = () => {
 
-        dispatch({ type: 'CHANGE_DATA', payload: { ...currentElement, date: state.date, comment: state.comment } })
-        console.log('submit', { ...currentElement, date: state.date, comment: state.comment })
+        dispatch({ type: 'CHANGE_DATA', payload: { ...currentElement, date: state.date, details: state.details } })
+        console.log('submit', { ...currentElement, date: state.date, details: state.details })
     }
 
-    const cancelCommentDis = currentElement && currentElement.comment === state.comment
+    const cancelDetailsDis = currentElement && currentElement.details === state.details
     const cancelDateDis = currentElement && currentElement.date === state.date
 
     return (
@@ -108,49 +108,49 @@ const CustomInput = (props: ICustomInputProps) => {
 
                 <View style={styles.inputContainer}>
                     <TextInput
-                        style={styles.textInput}
+                        style={styles.dateInput}
                         placeholder='enter date'
                         value={state.date}
                         onChangeText={handleDateChange}
                     />
-                    <View style={styles.buttons}>
-                        <TouchableOpacity
-                            style={!cancelDateDis
-                                ? styles.button
-                                : { ...styles.button, backgroundColor: 'gray', borderColor: 'gray' }}
-                            disabled={cancelDateDis}
-                            onPress={cancelDate}>
-                            <Text style={styles.buttonText}>Cancel</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity
+                    <View style={styles.dateButtons}>
+                    <TouchableOpacity
                             style={styles.button}
                             onPress={addNewDate}>
                             <Text style={styles.buttonText}>Set date</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            style={!cancelDateDis
+                                ? {...styles.button, paddingHorizontal: 20, marginLeft:10}
+                                : { ...styles.button, backgroundColor: 'gray', borderColor: 'gray',paddingHorizontal: 20, marginLeft:10 }}
+                            disabled={cancelDateDis}
+                            onPress={cancelDate}>
+                            <Text style={styles.buttonText}>Cancel</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
                 <View style={styles.inputContainer}>
                     <TextInput
                         style={styles.textInput}
-                        placeholder='enter comment'
-                        value={state.comment}
-                        onChangeText={handleCommentChange}
+                        placeholder='enter details'
+                        value={state.details}
+                        onChangeText={handleDetailsChange}
                         multiline={true}
                     />
                     <View style={styles.buttons}>
                         <TouchableOpacity
-                            style={!cancelCommentDis
+                            style={!cancelDetailsDis
                                 ? styles.button
                                 : { ...styles.button, backgroundColor: 'gray', borderColor: 'gray' }}
-                            disabled={cancelCommentDis}
-                            onPress={cancelComment}>
+                            disabled={cancelDetailsDis}
+                            onPress={cancelDetails}>
                             <Text style={styles.buttonText}>Cancel</Text>
                         </TouchableOpacity>
                         <TouchableOpacity
-                            style={(!cancelCommentDis || !cancelDateDis)
+                            style={(!cancelDetailsDis || !cancelDateDis)
                                 ? styles.button
                                 : { ...styles.sendButton, backgroundColor: 'gray', borderColor: 'gray' }}
-                            disabled={(cancelDateDis && cancelCommentDis)}
+                            disabled={(cancelDateDis && cancelDetailsDis)}
                             onPress={submit}>
                             <Text style={styles.buttonText}> Submit </Text>
                         </TouchableOpacity>
@@ -207,14 +207,31 @@ const styles = StyleSheet.create({
         borderBottomWidth: 1,
         borderBottomColor: 'lightgrey',
         paddingVertical: 5,
-        width: '50%',
+        paddingRight: 5,
+        width: '70%',
+    },
+    dateInput: {
+        borderStyle: 'solid',
+        borderBottomWidth: 1,
+        borderBottomColor: 'lightgrey',
+        paddingVertical: 5,
+        paddingRight: 5,
+        width: '40%',
+    },
+    dateButtons: {
+        display: 'flex',
+        flexDirection: 'row',
+        width: '60%',
+        justifyContent: 'flex-end',
+        paddingRight: 0,
+        marginTop: 5,
+        borderRadius: 10
     },
     buttons: {
         display: 'flex',
-        flexDirection: 'row',
-        width: '50%',
-        justifyContent: 'flex-end',
-        paddingRight: 10,
+        flexDirection: 'column',
+        width: '30%',
+        justifyContent: 'space-around',
         marginTop: 5,
         borderRadius: 10
     },
@@ -228,7 +245,7 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         overflow: 'hidden',
         backgroundColor: '#1f6b4e',
-        marginLeft: 10,
+        marginBottom: 5,
     },
     buttonText: {
         color: 'white',
@@ -244,7 +261,7 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         overflow: 'hidden',
         backgroundColor: '#1f6b4e',
-        marginLeft: 10,
+        marginBottom: 5,
     }
 });
 

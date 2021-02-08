@@ -17,7 +17,7 @@ const data: IDataItem[] = [
         name: 'Sergei111',
         date: '20-01-01',
         dbType: 'asana',
-        comment: 'comment 111111111'
+        details: 'details 111111111'
     },
     {
         id: '2',
@@ -26,7 +26,7 @@ const data: IDataItem[] = [
         name: 'Sergei222',
         date: '20-02-02',
         dbType: 'teamDock',
-        comment: 'comment 2222222222'
+        details: 'details 2222222222'
     },
     {
         id: '3',
@@ -35,7 +35,7 @@ const data: IDataItem[] = [
         name: 'Sergei333',
         date: '20-03-03',
         dbType: 'teamDock',
-        comment: 'comment 3333333333333'
+        details: 'details 3333333333333'
     }
     ,
     {
@@ -45,7 +45,7 @@ const data: IDataItem[] = [
         name: 'Sergei444',
         date: '20-04-04',
         dbType: 'allBrokersDock',
-        comment: 'comment 4444444444444'
+        details: 'details 4444444444444'
     },
     {
         id: '5',
@@ -54,7 +54,7 @@ const data: IDataItem[] = [
         name: 'Sergei555',
         date: '20-05-05',
         dbType: 'teamDock',
-        comment: 'comment 5555555555'
+        details: 'details 5555555555'
     },
     {
         id: '6',
@@ -63,7 +63,7 @@ const data: IDataItem[] = [
         name: 'Sergei666',
         date: '20-06-06',
         dbType: 'allBrokersDock',
-        comment: 'comment 666666666666666'
+        details: 'details 666666666666666'
     }
 ]
 
@@ -74,7 +74,7 @@ export interface IDataItem {
     name: string;
     date: string;
     dbType: string;
-    comment: string;
+    details: string;
 }
 interface IAppProps {
     dataItems?: IDataItem[];
