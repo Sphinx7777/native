@@ -7,13 +7,14 @@ import { IDataItem } from './index';
 interface ICustomInputProps {
     currentElement: IDataItem | undefined;
     makeCall: (number: string) => any;
+    dispatch: (data: any) => void;
 }
 interface ICustomInputState {
     date: string;
     comment: string | undefined;
 }
 const CustomInput = (props: ICustomInputProps) => {
-    const { currentElement, makeCall } = props;
+    const { currentElement, makeCall, dispatch } = props;
 
     const [state, setState] = useState<ICustomInputState>({
         date: currentElement ? currentElement.date : '',
@@ -74,7 +75,14 @@ const CustomInput = (props: ICustomInputProps) => {
             }
         })
     }
-    const submit = () => console.log('submit', state)
+    const submit = () => {
+        
+        dispatch({type: 'CHANGE_DATA', payload: {...currentElement, date: state.date, comment: state.comment}})
+        console.log('submit', {...currentElement, date: state.date, comment: state.comment})
+    }
+
+    const cancelCommentDis = currentElement && currentElement.comment === state.comment
+    const cancelDateDis = currentElement && currentElement.date === state.date
 
     return (
         <>
@@ -107,7 +115,8 @@ const CustomInput = (props: ICustomInputProps) => {
                 />
                 <View style={styles.buttons}>
                 <TouchableOpacity
-                        style={styles.button}
+                style={!cancelDateDis ? styles.button : {...styles.button, backgroundColor: 'gray', borderColor: 'gray'}}
+                        disabled={cancelDateDis}
                         onPress={cancelDate}>
                         <Text style={styles.buttonText}>Cancel</Text>
                     </TouchableOpacity>
@@ -128,12 +137,14 @@ const CustomInput = (props: ICustomInputProps) => {
                 />
                 <View style={styles.buttons}>
                     <TouchableOpacity
-                        style={styles.button}
+                        style={!cancelCommentDis ? styles.button : {...styles.button, backgroundColor: 'gray', borderColor: 'gray'}}
+                        disabled={cancelCommentDis}
                         onPress={cancelComment}>
                         <Text style={styles.buttonText}>Cancel</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
-                        style={styles.sendButton}
+                        style={(!cancelCommentDis || !cancelDateDis) ? styles.button : {...styles.sendButton, backgroundColor: 'gray', borderColor: 'gray'} }
+                        disabled={(cancelDateDis && cancelCommentDis)}
                         onPress={submit}>
                         <Text style={styles.buttonText}> Submit </Text>
                     </TouchableOpacity>
@@ -149,7 +160,7 @@ const styles = StyleSheet.create({
         display: 'flex',
         flexDirection: 'column',
         width: '100%',
-        minHeight: 210,
+        minHeight: 205,
         borderColor: '#29a331',
         backgroundColor: '#c9f2cf',
         borderWidth: 2,
@@ -206,11 +217,11 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         borderWidth: 2,
-        borderColor: 'blue',
+        borderColor: '#1f6b4e',
         paddingHorizontal: 10,
         borderRadius: 10,
         overflow: 'hidden',
-        backgroundColor: '#0d3ea6',
+        backgroundColor: '#1f6b4e',
         marginLeft: 10,
     },
     buttonText: {
@@ -222,11 +233,11 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         borderWidth: 2,
-        borderColor: 'blue',
+        borderColor: '#1f6b4e',
         paddingHorizontal: 10,
         borderRadius: 10,
         overflow: 'hidden',
-        backgroundColor: '#0d3ea6',
+        backgroundColor: '#1f6b4e',
         marginLeft: 10,
     }
 });

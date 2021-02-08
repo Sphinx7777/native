@@ -13,12 +13,23 @@ const initialState = {
 
 
 const dataSignal = (state = initialState, action: any) => {
+
     switch (action.type) {
         case IReducerTypes.SET_DATA:
             return {
                 ...state,
                 dataItems: action.payload.dataItems
             };
+            case IReducerTypes.CHANGE_DATA:
+                return {
+                    ...state,
+                    dataItems: state.dataItems.map((d: any) => {
+                        if (d.id === action.payload.id) {
+                            return action.payload
+                        }
+                        return d
+                    })
+                };
         default:
             return state;
     }

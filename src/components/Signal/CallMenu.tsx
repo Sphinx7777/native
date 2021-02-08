@@ -93,11 +93,11 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         borderWidth: 2,
-        borderColor: 'blue',
+        borderColor: '#1f6b4e',
         paddingHorizontal: 10,
         borderRadius: 10,
         overflow: 'hidden',
-        backgroundColor: '#0d3ea6',      
+        backgroundColor: '#1f6b4e'     
     },
     buttonText: {
         color: 'white',

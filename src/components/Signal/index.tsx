@@ -172,7 +172,7 @@ const Signal = (props: IAppProps) => {
                     setCurrentElement={setCurrentElement}
                 />
 
-                <CustomInput currentElement={currentElement} makeCall={makeCall} />
+                <CustomInput currentElement={currentElement} makeCall={makeCall} dispatch={dispatch}/>
                 <CallMenu
                     setCurrentItemIndex={setCurrentItemIndex}
                     currentItemIndex={currentItemIndex}
