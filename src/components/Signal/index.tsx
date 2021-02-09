@@ -1,15 +1,39 @@
 
 import { StatusBar } from 'expo-status-bar';
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { StyleSheet, View, ScrollView } from 'react-native';
-import { connect, useDispatch } from 'react-redux';
+import { connect } from 'react-redux';
 import ContactList from './ContactList';
 import CallMenu from './CallMenu';
 import CustomInput from './CustomInput';
 // @ts-ignore
 import call from 'react-native-phone-call'
 
-const data: IDataItem[] = [
+import DataEntity from '../../models/DataEntity';
+import saga from '../../decoradors/saga';
+import { EntityMap, EntityList } from '../../models/entity';
+
+
+// export type ISingleDataItem = EntityMap<{
+//     id: string;
+//     phone: string;
+//     email: string;
+//     name: string;
+//     date: string;
+//     dbType: string;
+//     details: string;
+//     }>;
+// interface ISignalProps {
+//     dataItems?: EntityList<ISingleDataItem>;
+//     user?: any;
+//     getData?: () => void;
+// }
+
+
+
+
+
+const data: any = [
     {
         id: '1',
         phone: '11111111',
@@ -76,31 +100,28 @@ export interface IDataItem {
     dbType: string;
     details: string;
 }
-interface IAppProps {
+interface ISignalProps {
     dataItems?: IDataItem[];
     user?: any;
-}
-interface IAppState {
-    response: any;
-    currentItemIndex: number;
-    currentElement: IDataItem | undefined;
+    getData?: () => void;
 }
 
-const Signal = (props: IAppProps) => {
-    const { dataItems } = props;
-    const dispatch = useDispatch()
-    const [state, setState] = useState<IAppState>({
+@saga(DataEntity, ['getData'])
+class Signal extends React.Component<ISignalProps> {
+    state = {
         response: null,
         currentItemIndex: 0,
-        currentElement: dataItems && dataItems[0]
-    })
+        currentElement: this.props.dataItems && this.props.dataItems[0]
+    }
 
-    const getData = async () => {
-        const res = await fetch(`http://neologic.golden-team.org/api/page/url/services`,
-        )
+
+    getSignalData = async () => {
+        const res = await fetch(`http://neologic.golden-team.org/api/page/url/services`)
         const response: any = await res.json()
-        dispatch({ type: 'SET_DATA', payload: { dataItems: data } })
-        setState((prevState) => {
+        if (response) {
+            this.props.getData()
+        }
+        this.setState((prevState) => {
             return {
                 ...prevState,
                 response,
@@ -108,7 +129,7 @@ const Signal = (props: IAppProps) => {
         })
     }
 
-    const makeCall = async (number?: string) => {
+    makeCall = async (number?: string) => {
         const args = {
             number,
             prompt: false
@@ -124,8 +145,8 @@ const Signal = (props: IAppProps) => {
             })
     }
 
-    const setCurrentItemIndex = (currentItemIndex: number) => {
-        setState((prevState) => {
+    setCurrentItemIndex = (currentItemIndex: number) => {
+        this.setState((prevState) => {
             return {
                 ...prevState,
                 currentItemIndex
@@ -134,59 +155,61 @@ const Signal = (props: IAppProps) => {
     }
 
 
-    const setCurrentElement = (currentElement: IDataItem) => {
-        setState((prevState) => {
+    setCurrentElement = (currentElement: IDataItem) => {
+        this.setState((prevState) => {
             return {
                 ...prevState,
                 currentElement,
             }
         })
     }
+    componentDidMount() {
+        this.getSignalData();
+    }
+    componentDidUpdate(prevProps) {
+        if (prevProps.dataItems !== this.props.dataItems) {
+            this.setState((prevState) => {
+                return {
+                    ...prevState,
+                    currentElement: this.props.dataItems && this.props.dataItems[0]
+                }
+            })
+        }
+    }
+    render() {
+        const { currentItemIndex, currentElement } = this.state
+        const { dataItems } = this.props
+        return (
+            <ScrollView style={styles.container}>
+                <View style={styles.viewContainer}>
+                    <StatusBar style="auto" backgroundColor='silver' />
+                    <ContactList
+                        currentItemIndex={currentItemIndex}
+                        callData={dataItems}
+                        setCurrentItemIndex={this.setCurrentItemIndex}
+                        makeCall={this.makeCall}
+                        currentElement={currentElement}
+                        setCurrentElement={this.setCurrentElement}
+                    />
 
-    useEffect(() => {
-        getData();
-    }, [])
-    useEffect(() => {
-        setState((prevState) => {
-            return {
-                ...prevState,
-                currentElement: dataItems && dataItems[0]
-            }
-        })
-    }, [dataItems])
+                    <CustomInput currentElement={currentElement} makeCall={this.makeCall} />
+                    <CallMenu
+                        setCurrentItemIndex={this.setCurrentItemIndex}
+                        currentItemIndex={currentItemIndex}
+                        callData={dataItems}
+                        setCurrentElement={this.setCurrentElement}
+                        makeCall={this.makeCall}
+                    />
+                </View>
 
-    const { currentItemIndex, currentElement } = state
-    return (
-
-
-
-        <ScrollView style={styles.container}>
-            <View style={styles.viewContainer}>
-                <StatusBar style="auto" backgroundColor='silver' />
-                <ContactList
-                    currentItemIndex={currentItemIndex}
-                    callData={dataItems}
-                    setCurrentItemIndex={setCurrentItemIndex}
-                    makeCall={makeCall}
-                    currentElement={currentElement}
-                    setCurrentElement={setCurrentElement}
-                />
-
-                <CustomInput currentElement={currentElement} makeCall={makeCall} dispatch={dispatch}/>
-                <CallMenu
-                    setCurrentItemIndex={setCurrentItemIndex}
-                    currentItemIndex={currentItemIndex}
-                    callData={dataItems}
-                    setCurrentElement={setCurrentElement}
-                    makeCall={makeCall}
-                />
-            </View>
-
-        </ScrollView>
-
+            </ScrollView>
 
 
-    );
+
+        );
+    }
+
+
 }
 
 const styles = StyleSheet.create({
@@ -197,16 +220,16 @@ const styles = StyleSheet.create({
 
     },
     container: {
-        
+
     }
 });
 
 const mapStateToProps = (state: any) => {
-    const { dataSignal: { dataItems }, identity: { user } } = state;
     return {
-        dataItems,
-        user
+        dataItems: state.entities.get('signalData')?.valueSeq()?.toJS(),
+        user: null
     };
 }
 
-export default connect(mapStateToProps, {})(Signal)
+
+export default connect(mapStateToProps, { ...DataEntity.actions })(Signal)
