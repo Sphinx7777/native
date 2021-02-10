@@ -78,14 +78,11 @@ const CustomInput = (props: ICustomInputProps) => {
             }
         })
     }
-    const submit = () => console.log('Submit=', {...state, id: currentElement?.get('id')})
-
+    const submit = () => console.log('Submit=', { ...state, id: currentElement?.get('id') })
     const cancelDetailsDis = currentElDetails === state.details
     const cancelDateDis = currentElDate === state.date
-
     return (
         <>
-
             <View style={styles.container}>
                 {currentElement && <TouchableOpacity
                     onLongPress={calling}
@@ -102,9 +99,7 @@ const CustomInput = (props: ICustomInputProps) => {
                         <Text style={styles.text}>{currentElement?.get('date')}</Text>
                         <Text style={styles.text}>Calling Status</Text>
                     </View>
-
                 </TouchableOpacity>}
-
                 <View style={styles.inputContainer}>
                     <TextInput
                         style={{ ...styles.textInput, ...styles.dateInput }}
@@ -120,7 +115,7 @@ const CustomInput = (props: ICustomInputProps) => {
                         </TouchableOpacity>
                         <TouchableOpacity
                             style={!cancelDateDis
-                                ? { ...styles.button, marginLeft: 5}
+                                ? { ...styles.button, marginLeft: 5 }
                                 : { ...styles.button, ...styles.disabled, marginLeft: 5 }}
                             disabled={cancelDateDis}
                             onPress={cancelDate}>
@@ -145,9 +140,7 @@ const CustomInput = (props: ICustomInputProps) => {
                             onPress={cancelDetails}>
                             <Text style={styles.buttonText}>Cancel</Text>
                         </TouchableOpacity>
-
                     </View>
-
                 </View>
                 <View style={styles.sendButtonContainer}>
                     <TouchableOpacity
@@ -159,7 +152,6 @@ const CustomInput = (props: ICustomInputProps) => {
                         <Text style={styles.buttonText}> Submit </Text>
                     </TouchableOpacity>
                 </View>
-
             </View>
         </>
     );

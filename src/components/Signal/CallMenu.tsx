@@ -1,9 +1,7 @@
-
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, ScrollView } from 'react-native';
 import { ISingleDataItem } from 'src/models/DataEntity';
 import { EntityList } from '../../models/entity';
-
 interface ICallMenuProps {
     setCurrentItemIndex: (currentItemIndex: number) => void;
     currentItemIndex: number;
@@ -11,12 +9,11 @@ interface ICallMenuProps {
     makeCall: (phone: string) => Promise<any>;
     setCurrentElement: (currentElement: ISingleDataItem) => void;
 }
-
 interface ICallMenuState {
     callStart: boolean;
 }
 const CallMenu = (props: ICallMenuProps) => {
-    const { setCurrentItemIndex, currentItemIndex, callData, makeCall, setCurrentElement} = props;
+    const { setCurrentItemIndex, currentItemIndex, callData, makeCall, setCurrentElement } = props;
 
     const [state, setState] = useState<ICallMenuState>({
         callStart: false
@@ -69,27 +66,22 @@ const CallMenu = (props: ICallMenuProps) => {
                 </View>
                 <View style={styles.buttonsBlock}>
                     <TouchableOpacity
-                        style={{...styles.button, marginTop: 1, marginBottom: 5}}
+                        style={{ ...styles.button, marginTop: 1, marginBottom: 5 }}
                         onPress={handlePausePress}
                     >
                         <Text style={styles.buttonText}>Pause</Text>
                     </TouchableOpacity>
-
-
                     <TouchableOpacity
-                        style={{...styles.button, marginBottom: 1,marginTop: 5, paddingVertical: 7}}
+                        style={{ ...styles.button, marginBottom: 1, marginTop: 5, paddingVertical: 7 }}
                         onPress={handleNextPress}
                     >
                         <Text style={styles.buttonText}>Next call</Text>
                     </TouchableOpacity>
                 </View>
-
             </View>
         </>
     );
 }
-
-
 
 const styles = StyleSheet.create({
     button: {
@@ -101,7 +93,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10,
         borderRadius: 10,
         overflow: 'hidden',
-        backgroundColor: '#1f6b4e'     
+        backgroundColor: '#1f6b4e'
     },
     buttonText: {
         color: 'white',
@@ -128,9 +120,7 @@ const styles = StyleSheet.create({
     buttonsBlock: {
         display: 'flex',
         width: '35%',
-
     },
 });
-
 
 export default CallMenu;

@@ -8,26 +8,9 @@ import CallMenu from './CallMenu';
 import CustomInput from './CustomInput';
 // @ts-ignore
 import call from 'react-native-phone-call'
-
 import DataEntity, { ISingleDataItem } from '../../models/DataEntity';
 import saga from '../../decoradors/saga';
 import { EntityMap, EntityList } from '../../models/entity';
-
-
-// export type ISingleDataItem = EntityMap<{
-//     id: string;
-//     phone: string;
-//     email: string;
-//     name: string;
-//     date: string;
-//     dbType: string;
-//     details: string;
-//     }>;
-
-
-
-
-
 
 const data: any = [
     {
@@ -86,31 +69,14 @@ const data: any = [
         details: 'details 666666666666666'
     }
 ]
-
-// export interface IDataItem {
-//     id: string;
-//     phone: string;
-//     email: string;
-//     name: string;
-//     date: string;
-//     dbType: string;
-//     details: string;
-// }
-// interface ISignalProps {
-//     dataItems?: IDataItem[];
-//     user?: any;
-//     getData?: () => void;
-// }
-
 interface ISignalProps {
     dataItems?: EntityList<ISingleDataItem>;
     user?: any;
     getData?: () => void;
 }
-
 @saga(DataEntity, ['getData'])
 class Signal extends React.Component<ISignalProps> {
-    
+
     state = {
         response: null,
         currentItemIndex: 0,
@@ -194,16 +160,15 @@ class Signal extends React.Component<ISignalProps> {
                         setCurrentElement={this.setCurrentElement}
                     />
                     <ScrollView style={styles.container}>
-                    <CustomInput currentElement={currentElement} makeCall={this.makeCall} />
-                    <CallMenu
-                        setCurrentItemIndex={this.setCurrentItemIndex}
-                        currentItemIndex={currentItemIndex}
-                        callData={dataItems}
-                        setCurrentElement={this.setCurrentElement}
-                        makeCall={this.makeCall}
-                    />
+                        <CustomInput currentElement={currentElement} makeCall={this.makeCall} />
+                        <CallMenu
+                            setCurrentItemIndex={this.setCurrentItemIndex}
+                            currentItemIndex={currentItemIndex}
+                            callData={dataItems}
+                            setCurrentElement={this.setCurrentElement}
+                            makeCall={this.makeCall}
+                        />
                     </ScrollView>
-
                 </View>
             </View>
         );

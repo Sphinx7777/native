@@ -1,10 +1,7 @@
-
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, ScrollView, FlatList, TouchableOpacity, GestureResponderEvent } from 'react-native';
 import { ISingleDataItem, IDataItem } from 'src/models/DataEntity';
 import { EntityList } from '../../models/entity';
-
-
 interface IContactListProps {
     callData: EntityList<ISingleDataItem> | undefined;
     setCurrentItemIndex: (currentItem: number) => void;
@@ -52,9 +49,9 @@ const ContactList = (props: IContactListProps) => {
         const onPress: (event: GestureResponderEvent) => void = () => handlePress(data)
         return (
             <TouchableOpacity
-            style={currentItemIndex !== index ? styles.textContainer : styles.textContainerActive}
-            onLongPress={onLongPress}
-            onPress={onPress}>
+                style={currentItemIndex !== index ? styles.textContainer : styles.textContainerActive}
+                onLongPress={onLongPress}
+                onPress={onPress}>
                 <View style={styles.nameLine}>
                     <Text style={styles.text}>{item?.name}</Text>
                     <Text style={styles.text}>{item?.phone}</Text>
@@ -76,9 +73,9 @@ const ContactList = (props: IContactListProps) => {
             <View style={styles.container}>
                 {
                     callData && callData.size > 0 && <FlatList
-                    keyExtractor={keyExtractor}
-                    data={callData?.valueSeq()?.toJS()}
-                    renderItem={renderItem}
+                        keyExtractor={keyExtractor}
+                        data={callData?.valueSeq()?.toJS()}
+                        renderItem={renderItem}
                     />
                 }
 
