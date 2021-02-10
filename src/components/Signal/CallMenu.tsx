@@ -1,14 +1,15 @@
 
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, ScrollView } from 'react-native';
-import { IDataItem } from './index';
+import { ISingleDataItem } from 'src/models/DataEntity';
+import { EntityList } from '../../models/entity';
 
 interface ICallMenuProps {
     setCurrentItemIndex: (currentItemIndex: number) => void;
     currentItemIndex: number;
-    callData: IDataItem[] | undefined;
-    makeCall: (number: string) => Promise<any>;
-    setCurrentElement: (currentElement: IDataItem) => void;
+    callData: EntityList<ISingleDataItem> | undefined;
+    makeCall: (phone: string) => Promise<any>;
+    setCurrentElement: (currentElement: ISingleDataItem) => void;
 }
 
 interface ICallMenuState {
@@ -22,8 +23,10 @@ const CallMenu = (props: ICallMenuProps) => {
     })
 
     const handleNextPress = async () => {
-        if (callData && currentItemIndex < callData?.length - 1) {
-            const res = await makeCall(callData[currentItemIndex + 1].phone)
+        if (callData && currentItemIndex < callData?.size - 1) {
+            const phone = callData?.valueSeq()?.getIn([currentItemIndex + 1, 'phone'])
+            const element = callData?.valueSeq()?.get(currentItemIndex + 1)
+            const res = await makeCall(phone)
             if (res) {
                 setState((prevState) => {
                     return {
@@ -32,12 +35,13 @@ const CallMenu = (props: ICallMenuProps) => {
                     }
                 })
                 setCurrentItemIndex(currentItemIndex + 1)
-                setCurrentElement(callData[currentItemIndex + 1])
+                setCurrentElement(element)
             }
         } else {
             if (callData) {
-                const index = callData?.length - 1
-                const res = await makeCall(callData[0].phone)
+                const phone = callData?.valueSeq()?.getIn([0, 'phone'])
+                const element = callData?.valueSeq()?.get(0)
+                const res = await makeCall(phone)
                 if (res) {
                     setState((prevState) => {
                         return {
@@ -46,7 +50,7 @@ const CallMenu = (props: ICallMenuProps) => {
                         }
                     })
                     setCurrentItemIndex(0)
-                    setCurrentElement(callData[0])
+                    setCurrentElement(element)
                 }
             }
         }

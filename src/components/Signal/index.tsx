@@ -9,7 +9,7 @@ import CustomInput from './CustomInput';
 // @ts-ignore
 import call from 'react-native-phone-call'
 
-import DataEntity from '../../models/DataEntity';
+import DataEntity, { ISingleDataItem } from '../../models/DataEntity';
 import saga from '../../decoradors/saga';
 import { EntityMap, EntityList } from '../../models/entity';
 
@@ -23,11 +23,7 @@ import { EntityMap, EntityList } from '../../models/entity';
 //     dbType: string;
 //     details: string;
 //     }>;
-// interface ISignalProps {
-//     dataItems?: EntityList<ISingleDataItem>;
-//     user?: any;
-//     getData?: () => void;
-// }
+
 
 
 
@@ -91,29 +87,35 @@ const data: any = [
     }
 ]
 
-export interface IDataItem {
-    id: string;
-    phone: string;
-    email: string;
-    name: string;
-    date: string;
-    dbType: string;
-    details: string;
-}
+// export interface IDataItem {
+//     id: string;
+//     phone: string;
+//     email: string;
+//     name: string;
+//     date: string;
+//     dbType: string;
+//     details: string;
+// }
+// interface ISignalProps {
+//     dataItems?: IDataItem[];
+//     user?: any;
+//     getData?: () => void;
+// }
+
 interface ISignalProps {
-    dataItems?: IDataItem[];
+    dataItems?: EntityList<ISingleDataItem>;
     user?: any;
     getData?: () => void;
 }
 
 @saga(DataEntity, ['getData'])
 class Signal extends React.Component<ISignalProps> {
+    
     state = {
         response: null,
         currentItemIndex: 0,
-        currentElement: this.props.dataItems && this.props.dataItems[0]
+        currentElement: this.props.dataItems && this.props.dataItems?.valueSeq()?.get(0)
     }
-
 
     getSignalData = async () => {
         const res = await fetch(`http://neologic.golden-team.org/api/page/url/services`)
@@ -136,11 +138,9 @@ class Signal extends React.Component<ISignalProps> {
         }
         return call(args)
             .then((r: any) => {
-                console.log('makeCall_start', r)
                 return r;
             })
             .catch((err: any) => {
-                console.error('makeCall_ERROR', err)
                 return err
             })
     }
@@ -154,8 +154,7 @@ class Signal extends React.Component<ISignalProps> {
         })
     }
 
-
-    setCurrentElement = (currentElement: IDataItem) => {
+    setCurrentElement = (currentElement: ISingleDataItem) => {
         this.setState((prevState) => {
             return {
                 ...prevState,
@@ -163,35 +162,37 @@ class Signal extends React.Component<ISignalProps> {
             }
         })
     }
+
     componentDidMount() {
         this.getSignalData();
     }
-    componentDidUpdate(prevProps) {
+
+    componentDidUpdate(prevProps: any) {
         if (prevProps.dataItems !== this.props.dataItems) {
+            const currentElement = this.props.dataItems && this.props.dataItems?.valueSeq()?.get(0)
             this.setState((prevState) => {
                 return {
                     ...prevState,
-                    currentElement: this.props.dataItems && this.props.dataItems[0]
+                    currentElement
                 }
             })
         }
     }
+
     render() {
         const { currentItemIndex, currentElement } = this.state
         const { dataItems } = this.props
         return (
             <ScrollView style={styles.container}>
                 <View style={styles.viewContainer}>
-                    <StatusBar style="auto" backgroundColor='silver' />
+                    <StatusBar style='auto' backgroundColor='silver' />
                     <ContactList
                         currentItemIndex={currentItemIndex}
                         callData={dataItems}
                         setCurrentItemIndex={this.setCurrentItemIndex}
                         makeCall={this.makeCall}
-                        currentElement={currentElement}
                         setCurrentElement={this.setCurrentElement}
                     />
-
                     <CustomInput currentElement={currentElement} makeCall={this.makeCall} />
                     <CallMenu
                         setCurrentItemIndex={this.setCurrentItemIndex}
@@ -201,15 +202,9 @@ class Signal extends React.Component<ISignalProps> {
                         makeCall={this.makeCall}
                     />
                 </View>
-
             </ScrollView>
-
-
-
         );
     }
-
-
 }
 
 const styles = StyleSheet.create({
@@ -217,16 +212,16 @@ const styles = StyleSheet.create({
         backgroundColor: '#d7dbd7',
         paddingHorizontal: 5,
         paddingTop: 30,
-
     },
     container: {
-
+        flex: 1
     }
 });
 
 const mapStateToProps = (state: any) => {
+    const dataItems = state.entities.get('signalData');
     return {
-        dataItems: state.entities.get('signalData')?.valueSeq()?.toJS(),
+        dataItems,
         user: null
     };
 }

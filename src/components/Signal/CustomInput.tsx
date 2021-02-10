@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-native';
 import { useDispatch } from 'react-redux';
+import { ISingleDataItem } from 'src/models/DataEntity';
 import { getStringDate } from '../../utils';
-import { IDataItem } from './index';
 
 
 interface ICustomInputProps {
-    currentElement: IDataItem | undefined;
-    makeCall: (number: string) => any;
+    currentElement: ISingleDataItem | undefined;
+    makeCall: (number: string) => Promise<any>;
 }
 interface ICustomInputState {
     date: string;
@@ -16,17 +16,19 @@ interface ICustomInputState {
 const CustomInput = (props: ICustomInputProps) => {
     const { currentElement, makeCall } = props;
     const dispatch = useDispatch()
+    const currentElDate = currentElement ? currentElement?.get('date') : ''
+    const currentElDetails = currentElement && currentElement?.get('details') ? currentElement?.get('details') : ''
 
     const [state, setState] = useState<ICustomInputState>({
-        date: currentElement ? currentElement.date : '',
-        details: currentElement && currentElement.details ? currentElement.details : ''
+        date: currentElDate,
+        details: currentElDetails
     })
 
     const cancelDate = () => {
         setState((prevState) => {
             return {
                 ...prevState,
-                date: currentElement ? currentElement.date : ''
+                date: currentElDate
             }
         })
     }
@@ -35,11 +37,11 @@ const CustomInput = (props: ICustomInputProps) => {
         setState((prevState) => {
             return {
                 ...prevState,
-                date: currentElement && currentElement.date ? currentElement.date : '',
-                details: currentElement && currentElement.details ? currentElement.details : ''
+                date: currentElDate,
+                details: currentElDetails
             }
         })
-    }, [currentElement && currentElement.date, currentElement && currentElement.details])
+    }, [currentElDate, currentElDetails])
 
     const addNewDate = () => {
         setState((prevState) => {
@@ -50,7 +52,7 @@ const CustomInput = (props: ICustomInputProps) => {
         })
     }
 
-    const calling = () => currentElement && makeCall(currentElement?.phone)
+    const calling = () => currentElement && makeCall(currentElement?.get('phone'))
 
     const handleDateChange = (data: string) => {
         setState((prevState) => {
@@ -72,7 +74,7 @@ const CustomInput = (props: ICustomInputProps) => {
         setState((prevState) => {
             return {
                 ...prevState,
-                details: currentElement ? currentElement.details : ''
+                details: currentElDetails
             }
         })
     }
@@ -81,8 +83,8 @@ const CustomInput = (props: ICustomInputProps) => {
         dispatch({ type: 'CHANGE_DATA', payload: { ...currentElement, date: state.date, details: state.details } })
     }
 
-    const cancelDetailsDis = currentElement && currentElement.details === state.details
-    const cancelDateDis = currentElement && currentElement.date === state.date
+    const cancelDetailsDis = currentElDetails === state.details
+    const cancelDateDis = currentElDate === state.date
 
     return (
         <>
@@ -92,15 +94,15 @@ const CustomInput = (props: ICustomInputProps) => {
                     onLongPress={calling}
                     style={styles.textContainer}>
                     <View style={styles.nameLine}>
-                        <Text style={styles.text}>{currentElement?.name}</Text>
-                        <Text style={styles.text}>{currentElement?.phone}</Text>
-                        <Text style={styles.text}>{currentElement?.dbType}</Text>
+                        <Text style={styles.text}>{currentElement?.get('name')}</Text>
+                        <Text style={styles.text}>{currentElement?.get('phone')}</Text>
+                        <Text style={styles.text}>{currentElement?.get('dbType')}</Text>
                     </View>
                     <View style={styles.nameLine}>
-                        <Text style={styles.text}>{currentElement?.email}</Text>
+                        <Text style={styles.text}>{currentElement?.get('email')}</Text>
                     </View>
                     <View style={styles.nameLine}>
-                        <Text style={styles.text}>{currentElement?.date}</Text>
+                        <Text style={styles.text}>{currentElement?.get('date')}</Text>
                         <Text style={styles.text}>Calling Status</Text>
                     </View>
 
@@ -108,7 +110,7 @@ const CustomInput = (props: ICustomInputProps) => {
 
                 <View style={styles.inputContainer}>
                     <TextInput
-                        style={styles.dateInput}
+                        style={{...styles.textInput, ...styles.dateInput}}
                         placeholder='enter date'
                         value={state.date}
                         onChangeText={handleDateChange}
@@ -152,8 +154,8 @@ const CustomInput = (props: ICustomInputProps) => {
                 </View>
                 <TouchableOpacity
                             style={(!cancelDetailsDis || !cancelDateDis)
-                                ? styles.sendButton
-                                : { ...styles.sendButton, backgroundColor: 'gray', borderColor: 'gray' }}
+                                ? {...styles.button, ...styles.sendButton}
+                                : {...styles.button, ...styles.sendButton, backgroundColor: 'gray', borderColor: 'gray' }}
                             disabled={(cancelDateDis && cancelDetailsDis)}
                             onPress={submit}>
                             <Text style={styles.buttonText}> Submit </Text>
@@ -209,15 +211,10 @@ const styles = StyleSheet.create({
         borderBottomWidth: 1,
         borderBottomColor: 'lightgrey',
         paddingVertical: 5,
-        paddingRight: 5,
+        marginRight: 5,
         width: '70%',
     },
     dateInput: {
-        borderStyle: 'solid',
-        borderBottomWidth: 1,
-        borderBottomColor: 'lightgrey',
-        paddingVertical: 5,
-        paddingRight: 5,
         width: '40%',
     },
     dateButtons: {
@@ -254,17 +251,9 @@ const styles = StyleSheet.create({
         fontSize: 18
     },
     sendButton: {
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderWidth: 2,
-        borderColor: '#1f6b4e',
-        paddingHorizontal: 10,
-        borderRadius: 10,
-        marginLeft: 270,
-        overflow: 'hidden',
-        backgroundColor: '#1f6b4e',
+        marginBottom: 0,
         marginTop: 15,
+        marginLeft: 277
     }
 });
 

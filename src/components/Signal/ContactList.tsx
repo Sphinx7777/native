@@ -1,31 +1,32 @@
 
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, ScrollView, FlatList, TouchableOpacity, GestureResponderEvent } from 'react-native';
-import { IDataItem } from './index';
+import { ISingleDataItem, IDataItem } from 'src/models/DataEntity';
+import { EntityList } from '../../models/entity';
 
 
 interface IContactListProps {
-    callData: IDataItem[] | undefined;
+    callData: EntityList<ISingleDataItem> | undefined;
     setCurrentItemIndex: (currentItem: number) => void;
     currentItemIndex: number;
-    makeCall: (number: string) => Promise<any>;
-    setCurrentElement: (currentElement: IDataItem) => void;
-    currentElement: IDataItem | undefined;
+    makeCall: (phone: string) => Promise<any>;
+    setCurrentElement: (currentElement: ISingleDataItem) => void;
 }
-
 interface IContactListState {
     callStart: boolean;
 }
 const ContactList = (props: IContactListProps) => {
-    const { callData, setCurrentItemIndex, currentItemIndex, makeCall, setCurrentElement, currentElement} = props;
+    const { callData, setCurrentItemIndex, currentItemIndex, makeCall, setCurrentElement } = props;
 
     const [state, setState] = useState<IContactListState>({
         callStart: false
     })
 
     const handleLongPress = async (data: any) => {
-        const { separators, item, index } = data
-        const res = await makeCall(item.phone)
+        const { index } = data
+        const phone = callData?.valueSeq()?.getIn([index, 'phone'])
+        const element = callData?.valueSeq()?.get(index)
+        const res = await makeCall(phone)
         if (res) {
             setState((prevState) => {
                 return {
@@ -33,14 +34,15 @@ const ContactList = (props: IContactListProps) => {
                     callStart: res
                 }
             })
-            setCurrentElement(item)
+            setCurrentElement(element)
             setCurrentItemIndex(index)
         }
     }
 
     const handlePress = (data: any) => {
-        const { separators, item, index } = data
-        setCurrentElement(item)
+        const { index } = data
+        const element = callData?.valueSeq()?.get(index)
+        setCurrentElement(element)
         setCurrentItemIndex(index)
     }
 
@@ -66,16 +68,16 @@ const ContactList = (props: IContactListProps) => {
             </TouchableOpacity>
         )
     }
-    const keyExtractor = (item: IDataItem) => item?.phone
 
+    const keyExtractor = (item: IDataItem) => item?.id
 
     return (
         <>
             <View style={styles.container}>
                 {
-                    callData && callData.length > 0 && <FlatList
+                    callData && callData.size > 0 && <FlatList
                     keyExtractor={keyExtractor}
-                    data={callData}
+                    data={callData?.valueSeq()?.toJS()}
                     renderItem={renderItem}
                     />
                 }

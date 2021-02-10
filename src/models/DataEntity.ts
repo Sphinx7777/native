@@ -1,7 +1,27 @@
 import action from '../decoradors/action';
-import Entity from './entity';
+import Entity, { EntityMap } from './entity';
 import { call, cancelled } from 'redux-saga/effects';
 import { ENTITY } from '../constants';
+
+export type ISingleDataItem = EntityMap<{
+    id: string;
+    phone: string;
+    email: string;
+    name: string;
+    date: string;
+    dbType: string;
+    details: string;
+    }>;
+
+    export interface IDataItem {
+    id: string;
+    phone: string;
+    email: string;
+    name: string;
+    date: string;
+    dbType: string;
+    details: string;
+}
 
 class DataEntity extends Entity {
 
