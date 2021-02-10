@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, ScrollView, FlatList, TouchableOpacity, GestureResponderEvent, Image } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, FlatList, TouchableOpacity, GestureResponderEvent, Image, ActivityIndicator } from 'react-native';
 import { ISingleDataItem, IDataItem } from '../../models/DataEntity';
 import { EntityList } from '../../models/entity';
 interface IContactListProps {
@@ -65,6 +65,10 @@ const ContactList = (props: IContactListProps) => {
 
     const keyExtractor = (item: IDataItem) => item?.id
 
+    if (!callData || callData.size === 0) {
+        return (<View style={styles.loadContainer}><Text><ActivityIndicator size="large" color="green" /></Text></View>)
+    }
+
     return (
         <>
             <View style={styles.container}>
@@ -119,6 +123,13 @@ const styles = StyleSheet.create({
     text: {
         color: 'black',
         paddingVertical: 2
+    },
+    loadContainer: {
+        display:'flex',
+        flexDirection: 'column',
+        height: 270,
+        justifyContent: 'center',
+        alignItems: 'center'
     }
 });
 

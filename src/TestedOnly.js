@@ -116,7 +116,7 @@ const App = () => {
   };
 
   return (
-    <SafeAreaView style={{flex: 1}}>
+    <SafeAreaView style={{flex: 1, paddingTop: 30}}>
       <View style={styles.container}>
         <View style={styles.header}>
           <Text style={styles.headerTextLarge}>

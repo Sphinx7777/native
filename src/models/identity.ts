@@ -21,19 +21,14 @@ class Identity extends Entity {
     }
 
     @action()
-    public * loginUser(data: ILoginData) {
-        try {
-            const { response } = yield call(Entity.fetch, '/auth/login', data, HTTP_METHOD.POST);
-            if (response && response.user
-                && response.user.userId
-                && response.user.token && response.user.token.length > 0) {
-                yield put(getIdentity(response));
-            }
-        } finally {
-            if (yield cancelled()) {
-                ('authorize yield cancelled');
-            }
-        }
+    public * loginUser(data: ILoginData) {  
+        console.log('loginUser', data)
+            // const { response } = yield call(Entity.fetch, '/auth/login', data, HTTP_METHOD.POST);
+            // if (response && response.user
+            //     && response.user.userId
+            //     && response.user.token && response.user.token.length > 0) {
+            //     yield put(getIdentity(response));
+            // }
     }
 
     @action()

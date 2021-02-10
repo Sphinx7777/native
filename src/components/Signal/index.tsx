@@ -73,6 +73,7 @@ interface ISignalProps {
     dataItems?: EntityList<ISingleDataItem>;
     user?: any;
     getData?: () => void;
+    navigation?: any;
 }
 @saga(DataEntity, ['getData'])
 class Signal extends React.Component<ISignalProps> {
@@ -148,10 +149,10 @@ class Signal extends React.Component<ISignalProps> {
     render() {
         const { currentItemIndex, currentElement } = this.state
         const { dataItems } = this.props
+
         return (
             <View style={styles.container}>
                 <View style={styles.viewContainer}>
-                    <StatusBar style='auto' backgroundColor='silver' />
                     <ContactList
                         currentItemIndex={currentItemIndex}
                         callData={dataItems}
@@ -180,7 +181,7 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#d7dbd7',
         paddingHorizontal: 5,
-        paddingTop: 30,
+        paddingTop: 30
     },
     container: {
         flex: 2
@@ -194,6 +195,5 @@ const mapStateToProps = (state: any) => {
         user: null
     };
 }
-
 
 export default connect(mapStateToProps, { ...DataEntity.actions })(Signal)
