@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, ScrollView, FlatList, TouchableOpacity, GestureResponderEvent } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, FlatList, TouchableOpacity, GestureResponderEvent, Image } from 'react-native';
 import { ISingleDataItem, IDataItem } from 'src/models/DataEntity';
 import { EntityList } from '../../models/entity';
 interface IContactListProps {
@@ -10,13 +10,13 @@ interface IContactListProps {
     setCurrentElement: (currentElement: ISingleDataItem) => void;
 }
 interface IContactListState {
-    callStart: boolean;
+
 }
 const ContactList = (props: IContactListProps) => {
     const { callData, setCurrentItemIndex, currentItemIndex, makeCall, setCurrentElement } = props;
 
     const [state, setState] = useState<IContactListState>({
-        callStart: false
+
     })
 
     const handleLongPress = async (data: any) => {
@@ -25,12 +25,6 @@ const ContactList = (props: IContactListProps) => {
         const element = callData?.valueSeq()?.get(index)
         const res = await makeCall(phone)
         if (res) {
-            setState((prevState) => {
-                return {
-                    ...prevState,
-                    callStart: res
-                }
-            })
             setCurrentElement(element)
             setCurrentItemIndex(index)
         }
@@ -55,7 +49,10 @@ const ContactList = (props: IContactListProps) => {
                 <View style={styles.nameLine}>
                     <Text style={styles.text}>{item?.name}</Text>
                     <Text style={styles.text}>{item?.phone}</Text>
-                    <Text style={styles.text}>{item?.dbType}</Text>
+                    {item?.dbType === 'asana'
+                        ? <Image style={{ width: 25, height: 25 }} source={require('../../../assets/asana.png')} />
+                        : <Text style={{...styles.text, color: '#de471d', fontWeight: '700'}}>{item?.dbType}</Text>
+                    }
                 </View>
                 <Text style={styles.text}>{item?.email}</Text>
                 <View style={styles.nameLine}>

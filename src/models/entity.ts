@@ -26,7 +26,7 @@ const dataTest: any = [
         email: 'spamoglot222@gmail.com',
         name: 'Sergei222',
         date: '20-02-02',
-        dbType: 'teamDock',
+        dbType: 'DBX',
         details: 'details 2222222222'
     },
     {
@@ -35,7 +35,7 @@ const dataTest: any = [
         email: 'spamoglot333@gmail.com',
         name: 'Sergei333',
         date: '20-03-03',
-        dbType: 'teamDock',
+        dbType: 'C',
         details: 'details 3333333333333'
     }
     ,
@@ -45,7 +45,7 @@ const dataTest: any = [
         email: 'spamoglot444@gmail.com',
         name: 'Sergei444',
         date: '20-04-04',
-        dbType: 'allBrokersDock',
+        dbType: 'asana',
         details: 'details 4444444444444'
     },
     {
@@ -54,7 +54,7 @@ const dataTest: any = [
         email: 'spamoglot555@gmail.com',
         name: 'Sergei555',
         date: '20-05-05',
-        dbType: 'teamDock',
+        dbType: 'DBX',
         details: 'details 5555555555'
     },
     {
@@ -63,11 +63,10 @@ const dataTest: any = [
         email: 'spamoglot666@gmail.com',
         name: 'Sergei666',
         date: '20-06-06',
-        dbType: 'allBrokersDock',
+        dbType: 'C',
         details: 'details 666666666666666'
     }
 ]
-
 
 export enum CRUD {
     CREATE = 'CREATE',

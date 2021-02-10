@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, Image } from 'react-native';
 import { useDispatch } from 'react-redux';
 import { ISingleDataItem } from 'src/models/DataEntity';
 import { getStringDate } from '../../utils';
@@ -90,7 +90,10 @@ const CustomInput = (props: ICustomInputProps) => {
                     <View style={styles.nameLine}>
                         <Text style={styles.text}>{currentElement?.get('name')}</Text>
                         <Text style={styles.text}>{currentElement?.get('phone')}</Text>
-                        <Text style={styles.text}>{currentElement?.get('dbType')}</Text>
+                        {currentElement?.get('dbType') === 'asana'
+                            ? <Image style={{ width: 25, height: 25 }} source={require('../../../assets/asana.png')} />
+                            : <Text style={{...styles.text, color: '#de471d', fontWeight: '700'}}>{currentElement?.get('dbType')}</Text>
+                        }
                     </View>
                     <View style={styles.nameLine}>
                         <Text style={styles.text}>{currentElement?.get('email')}</Text>

@@ -1,7 +1,7 @@
 
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { StyleSheet, View, ScrollView } from 'react-native';
+import { StyleSheet, View, ScrollView, Platform } from 'react-native';
 import { connect } from 'react-redux';
 import ContactList from './ContactList';
 import CallMenu from './CallMenu';
@@ -28,7 +28,7 @@ const data: any = [
         email: 'spamoglot222@gmail.com',
         name: 'Sergei222',
         date: '20-02-02',
-        dbType: 'teamDock',
+        dbType: 'DBX',
         details: 'details 2222222222'
     },
     {
@@ -37,7 +37,7 @@ const data: any = [
         email: 'spamoglot333@gmail.com',
         name: 'Sergei333',
         date: '20-03-03',
-        dbType: 'teamDock',
+        dbType: 'C',
         details: 'details 3333333333333'
     }
     ,
@@ -47,7 +47,7 @@ const data: any = [
         email: 'spamoglot444@gmail.com',
         name: 'Sergei444',
         date: '20-04-04',
-        dbType: 'allBrokersDock',
+        dbType: 'asana',
         details: 'details 4444444444444'
     },
     {
@@ -56,7 +56,7 @@ const data: any = [
         email: 'spamoglot555@gmail.com',
         name: 'Sergei555',
         date: '20-05-05',
-        dbType: 'teamDock',
+        dbType: 'DBX',
         details: 'details 5555555555'
     },
     {
@@ -65,7 +65,7 @@ const data: any = [
         email: 'spamoglot666@gmail.com',
         name: 'Sergei666',
         date: '20-06-06',
-        dbType: 'allBrokersDock',
+        dbType: 'C',
         details: 'details 666666666666666'
     }
 ]
@@ -183,7 +183,7 @@ const styles = StyleSheet.create({
         paddingTop: 30,
     },
     container: {
-        flex: 1
+        flex: 2
     }
 });
 
