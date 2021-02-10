@@ -3,7 +3,6 @@ import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { StyleSheet, View, ScrollView, Platform } from 'react-native';
 import { connect } from 'react-redux';
-import ContactList from './ContactList';
 import CallMenu from './CallMenu';
 import CustomInput from './CustomInput';
 // @ts-ignore
@@ -11,6 +10,7 @@ import call from 'react-native-phone-call'
 import DataEntity, { ISingleDataItem } from '../../models/DataEntity';
 import saga from '../../decoradors/saga';
 import { EntityMap, EntityList } from '../../models/entity';
+import ContactList from './ContactList';
 
 const data: any = [
     {

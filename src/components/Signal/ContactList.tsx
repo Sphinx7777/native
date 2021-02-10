@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, ScrollView, FlatList, TouchableOpacity, GestureResponderEvent, Image } from 'react-native';
-import { ISingleDataItem, IDataItem } from 'src/models/DataEntity';
+import { ISingleDataItem, IDataItem } from '../../models/DataEntity';
 import { EntityList } from '../../models/entity';
 interface IContactListProps {
     callData: EntityList<ISingleDataItem> | undefined;

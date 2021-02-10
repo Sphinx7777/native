@@ -20,30 +20,60 @@ android:versionName="1.0" >
 <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 <uses-permission android:name="android.permission.READ_CALL_LOG" />
 <uses-permission android:name="android.permission.LISTEN_CALL_STATE" />
+<uses-permission android:name="android.permission.READ_SMS"/>
 
-<!-- <receiver android:name=".ServiceReceiver">
+<receiver android:name=".ServiceReceiver">
     <intent-filter>
       <action android:name="android.intent.action.PHONE_STATE" />
-   </intent-filter>
-</receiver> -->
+  </intent-filter>
+</receiver>
 
-    <!-- <application
-      android:name=".MainApplication"
-      android:allowBackup="true"
-      android:label="@string/app_name"
-      android:icon="@mipmap/ic_launcher"
-      android:theme="@style/AppTheme">
-      <activity
-        android:name=".MainActivity"
-        android:label="@string/app_name"
-        android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
-        android:windowSoftInputMode="adjustResize">
-        <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
-            <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
-      </activity>
-      <activity android:name="com.facebook.react.devsupport.DevSettingsActivity" />
-    </application> -->
+  <application>
+
+    <activity>
+      <intent-filter>
+        <action />
+        <category />
+        <data />
+      </intent-filter>
+      <meta-data />
+    </activity>
+
+    <activity-alias>
+      <intent-filter>
+        <action />
+        <category />
+        <data />
+      </intent-filter>
+      <meta-data />
+    </activity-alias>
+
+    <service>
+      <intent-filter>
+        <action />
+        <category />
+        <data />
+      </intent-filter>
+      <meta-data />
+    </service>
+
+    <receiver>
+      <intent-filter>
+        <action />
+        <category />
+        <data />
+      </intent-filter>
+      <meta-data />
+    </receiver>
+
+    <provider>
+      <grant-uri-permission />
+	  <path-permission />
+      <meta-data />
+    </provider>
+
+    <uses-library />
+
+  </application>
 
 </manifest>

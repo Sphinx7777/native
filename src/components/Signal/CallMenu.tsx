@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, ScrollView, Image } from 'react-native';
-import { ISingleDataItem } from 'src/models/DataEntity';
+import { ISingleDataItem } from '../../models/DataEntity';
 import { EntityList } from '../../models/entity';
 interface ICallMenuProps {
     setCurrentItemIndex: (currentItemIndex: number) => void;
@@ -72,10 +72,10 @@ const CallMenu = (props: ICallMenuProps) => {
                         <Text style={styles.buttonText}>Pause</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
-                        style={{ ...styles.button, marginBottom: 1, marginTop: 5, paddingVertical: 7 }}
+                        style={{ ...styles.button, marginBottom: 1, marginTop: 5, paddingVertical: 2 }}
                         onPress={handleNextPress}
                     >
-                        <Text style={styles.buttonText}>Next <Image style={{width: 30, height: 30}} source={require('../../../assets/phone-volume-solid.png')} /></Text>
+                        <Text style={styles.buttonText}>Next <Image style={{width: 20, height: 20}} source={require('../../../assets/phone-volume-solid.png')} /></Text>
                     </TouchableOpacity>
                 </View>
             </View>
@@ -97,7 +97,8 @@ const styles = StyleSheet.create({
     },
     buttonText: {
         color: 'white',
-        fontSize: 18
+        fontSize: 18,
+        paddingBottom: 8
     },
     container: {
         display: 'flex',
