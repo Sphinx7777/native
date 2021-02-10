@@ -114,7 +114,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         width: '100%',
         marginTop: 5,
-        height: 100,
+        height: 150,
         borderColor: '#a5a8a5',
         backgroundColor: '#f7faf7',
         borderWidth: 2,

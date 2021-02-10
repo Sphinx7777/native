@@ -78,10 +78,7 @@ const CustomInput = (props: ICustomInputProps) => {
             }
         })
     }
-    const submit = () => {
-
-        dispatch({ type: 'CHANGE_DATA', payload: { ...currentElement, date: state.date, details: state.details } })
-    }
+    const submit = () => console.log('Submit=', {...state, id: currentElement?.get('id')})
 
     const cancelDetailsDis = currentElDetails === state.details
     const cancelDateDis = currentElDate === state.date
@@ -110,21 +107,21 @@ const CustomInput = (props: ICustomInputProps) => {
 
                 <View style={styles.inputContainer}>
                     <TextInput
-                        style={{...styles.textInput, ...styles.dateInput}}
+                        style={{ ...styles.textInput, ...styles.dateInput }}
                         placeholder='enter date'
                         value={state.date}
                         onChangeText={handleDateChange}
                     />
                     <View style={styles.dateButtons}>
-                    <TouchableOpacity
+                        <TouchableOpacity
                             style={styles.button}
                             onPress={addNewDate}>
                             <Text style={styles.buttonText}>Set date</Text>
                         </TouchableOpacity>
                         <TouchableOpacity
                             style={!cancelDateDis
-                                ? {...styles.button, paddingHorizontal: 29, marginLeft:10}
-                                : { ...styles.button, backgroundColor: 'gray', borderColor: 'gray',paddingHorizontal: 29, marginLeft:10 }}
+                                ? { ...styles.button, marginLeft: 5}
+                                : { ...styles.button, ...styles.disabled, marginLeft: 5 }}
                             disabled={cancelDateDis}
                             onPress={cancelDate}>
                             <Text style={styles.buttonText}>Cancel</Text>
@@ -139,11 +136,11 @@ const CustomInput = (props: ICustomInputProps) => {
                         onChangeText={handleDetailsChange}
                         multiline={true}
                     />
-                    <View style={styles.buttons}>
+                    <View style={styles.detailsButtons}>
                         <TouchableOpacity
                             style={!cancelDetailsDis
                                 ? styles.button
-                                : { ...styles.button, backgroundColor: 'gray', borderColor: 'gray' }}
+                                : { ...styles.button, ...styles.disabled }}
                             disabled={cancelDetailsDis}
                             onPress={cancelDetails}>
                             <Text style={styles.buttonText}>Cancel</Text>
@@ -152,14 +149,17 @@ const CustomInput = (props: ICustomInputProps) => {
                     </View>
 
                 </View>
-                <TouchableOpacity
-                            style={(!cancelDetailsDis || !cancelDateDis)
-                                ? {...styles.button, ...styles.sendButton}
-                                : {...styles.button, ...styles.sendButton, backgroundColor: 'gray', borderColor: 'gray' }}
-                            disabled={(cancelDateDis && cancelDetailsDis)}
-                            onPress={submit}>
-                            <Text style={styles.buttonText}> Submit </Text>
-                        </TouchableOpacity>
+                <View style={styles.sendButtonContainer}>
+                    <TouchableOpacity
+                        style={(!cancelDetailsDis || !cancelDateDis)
+                            ? { ...styles.button, ...styles.sendButton }
+                            : { ...styles.button, ...styles.sendButton, ...styles.disabled }}
+                        disabled={(cancelDateDis && cancelDetailsDis)}
+                        onPress={submit}>
+                        <Text style={styles.buttonText}> Submit </Text>
+                    </TouchableOpacity>
+                </View>
+
             </View>
         </>
     );
@@ -170,7 +170,7 @@ const styles = StyleSheet.create({
         display: 'flex',
         flexDirection: 'column',
         width: '100%',
-        minHeight: 245,
+        minHeight: 270,
         borderColor: '#29a331',
         backgroundColor: '#c9f2cf',
         borderWidth: 2,
@@ -211,28 +211,18 @@ const styles = StyleSheet.create({
         borderBottomWidth: 1,
         borderBottomColor: 'lightgrey',
         paddingVertical: 5,
-        marginRight: 5,
         width: '70%',
     },
     dateInput: {
-        width: '40%',
+        width: '40%'
     },
     dateButtons: {
         display: 'flex',
         flexDirection: 'row',
-        width: '60%',
-        justifyContent: 'flex-end',
-        paddingRight: 0,
-        marginTop: 5,
         borderRadius: 10
     },
-    buttons: {
-        display: 'flex',
-        flexDirection: 'column',
-        width: '30%',
-        justifyContent: 'space-around',
+    detailsButtons: {
         marginTop: 5,
-        borderRadius: 10
     },
     button: {
         display: 'flex',
@@ -240,7 +230,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         borderWidth: 2,
         borderColor: '#1f6b4e',
-        paddingHorizontal: 10,
+        width: 85,
+        paddingVertical: 2,
         borderRadius: 10,
         overflow: 'hidden',
         backgroundColor: '#1f6b4e',
@@ -250,10 +241,21 @@ const styles = StyleSheet.create({
         color: 'white',
         fontSize: 18
     },
+    sendButtonContainer: {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'flex-end',
+        width: '100%'
+    },
     sendButton: {
         marginBottom: 0,
         marginTop: 15,
-        marginLeft: 277
+        width: 100,
+        paddingVertical: 5
+    },
+    disabled: {
+        backgroundColor: 'gray',
+        borderColor: 'gray'
     }
 });
 

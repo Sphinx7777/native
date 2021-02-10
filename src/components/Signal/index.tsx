@@ -183,7 +183,7 @@ class Signal extends React.Component<ISignalProps> {
         const { currentItemIndex, currentElement } = this.state
         const { dataItems } = this.props
         return (
-            <ScrollView style={styles.container}>
+            <View style={styles.container}>
                 <View style={styles.viewContainer}>
                     <StatusBar style='auto' backgroundColor='silver' />
                     <ContactList
@@ -193,6 +193,7 @@ class Signal extends React.Component<ISignalProps> {
                         makeCall={this.makeCall}
                         setCurrentElement={this.setCurrentElement}
                     />
+                    <ScrollView style={styles.container}>
                     <CustomInput currentElement={currentElement} makeCall={this.makeCall} />
                     <CallMenu
                         setCurrentItemIndex={this.setCurrentItemIndex}
@@ -201,14 +202,17 @@ class Signal extends React.Component<ISignalProps> {
                         setCurrentElement={this.setCurrentElement}
                         makeCall={this.makeCall}
                     />
+                    </ScrollView>
+
                 </View>
-            </ScrollView>
+            </View>
         );
     }
 }
 
 const styles = StyleSheet.create({
     viewContainer: {
+        flex: 1,
         backgroundColor: '#d7dbd7',
         paddingHorizontal: 5,
         paddingTop: 30,
