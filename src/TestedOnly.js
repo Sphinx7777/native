@@ -1,5 +1,5 @@
 
-
+import * as Permissions from 'expo-permissions';
 // How to Detect Call States in React Native App
 // https://aboutreact.com/detect-call-states/
 
@@ -21,7 +21,19 @@ import {
 //Import Call Detector
 import CallDetectorManager from 'react-native-call-detection';
 
+// import * as Permissions from 'expo-permissions';
+// const [permission, askForPermission] = Permissions.usePermissions(Permissions.REMINDERS, { ask: true });
+
+// console.log('permission', permission, 'askForPermission', askForPermission);
+// const { status, expires, permissions } = await Permissions.getAsync(
+//   Permissions.CALENDAR,
+// );
+// if (status !== 'granted') {
+//   alert('Hey! You have not enabled selected permissions');
+// }
+
 const App = () => {
+ 
   //to keep callDetector reference
   let callDetector = undefined;
 
@@ -29,13 +41,16 @@ const App = () => {
   let [isStart, setIsStart] = useState(false);
   let [flatListItems, setFlatListItems] = useState([]);
 
+
+
   const callFriendTapped = () => {
+    
     Linking.openURL('tel:5555555555').catch((err) => {
       console.log(err);
     });
   };
 
-  const startStopListener = () => {
+  const startStopListener = async () => {
     if (isStart) {
       console.log('Stop');
       callDetector && callDetector.dispose();
@@ -114,7 +129,7 @@ const App = () => {
         }} />
     );
   };
-
+console.log('flatListItems', flatListItems)
   return (
     <SafeAreaView style={{flex: 1, paddingTop: 30}}>
       <View style={styles.container}>
