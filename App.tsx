@@ -21,7 +21,7 @@ const App = () => {
             <NavigationContainer>
                 <Drawer.Navigator initialRouteName='Home' drawerStyle={styles.drawerStyle}>
                     <Drawer.Screen name='Home' component={Signal} options={{ title: 'Main page' }} />
-                    <Drawer.Screen name='Login' component={Login} options={{ title: 'Login' }} />
+                    <Drawer.Screen name='Login' component={Login} options={{ title: 'Authorization' }} />
                     <Drawer.Screen name='Test' component={TestedOnly} options={{ title: 'Test' }} />
                 </Drawer.Navigator>
             </NavigationContainer>
@@ -31,7 +31,7 @@ const App = () => {
 
 const styles = StyleSheet.create({
     drawerStyle: {
-        backgroundColor: '#c6cbef',
+        backgroundColor: '#fff',
         width: 240,
     }
 });
