@@ -51,7 +51,7 @@ const ContactList = (props: IContactListProps) => {
                     <Text style={styles.text}>{item?.phone}</Text>
                     {item?.dbType === 'asana'
                         ? <Image style={{ width: 25, height: 25 }} source={require('../../../assets/asana.png')} />
-                        : <Text style={{...styles.text, color: '#de471d', fontWeight: '700'}}>{item?.dbType}</Text>
+                        : <Text style={{ ...styles.text, color: '#de471d', fontWeight: '700' }}>{item?.dbType}</Text>
                     }
                 </View>
                 <Text style={styles.text}>{item?.email}</Text>
@@ -66,7 +66,11 @@ const ContactList = (props: IContactListProps) => {
     const keyExtractor = (item: IDataItem) => item?.id
 
     if (!callData || callData.size === 0) {
-        return (<View style={styles.loadContainer}><Text><ActivityIndicator size="large" color="green" /></Text></View>)
+        return (<View style={styles.loadContainer}>
+            <Text style={{ ...styles.loadContainer, height: 100 }}>
+                <ActivityIndicator size="large" color="green" />
+            </Text>
+        </View>)
     }
 
     return (
@@ -125,7 +129,7 @@ const styles = StyleSheet.create({
         paddingVertical: 2
     },
     loadContainer: {
-        display:'flex',
+        display: 'flex',
         flexDirection: 'column',
         height: 270,
         justifyContent: 'center',

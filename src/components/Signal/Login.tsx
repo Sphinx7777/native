@@ -4,11 +4,12 @@ import { connect } from 'react-redux';
 import Identity from '../../models/identity';
 import saga from '../../decoradors/saga';
 import { MAIL_REGEX } from '../../../src/utils';
-
-
 interface ICustomInputProps {
     loginUser?: (data: any) => void;
-    logoutUser?: (data: any) => void;
+    logoutUser?: () => void;
+    user?: any;
+    navigation?: any;
+    timezone?: string;
 }
 interface ICustomInputState {
     userEmail?: string;
@@ -47,6 +48,13 @@ class Login extends React.Component<ICustomInputProps, ICustomInputState> {
         })
     }
 
+    componentDidUpdate(prevProps) {
+        const isUser = prevProps.user !== this.props.user && this.props.user && this.props.user?.userId && this.props.user?.token?.length > 0
+        if (isUser) {
+            this.props.navigation?.navigate('Home')
+        }
+    }
+
     submit = () => {
         const emailValid = this.state.userEmail && this.state.userEmail.search(MAIL_REGEX) >= 0
         const passValid = this.state.password && this.state.password.length >= 8 && this.state.password.length < 50
@@ -67,7 +75,8 @@ class Login extends React.Component<ICustomInputProps, ICustomInputState> {
             })
         }
         if (emailValid && passValid) {
-            const data = {password: this.state.password, userEmail: this.state.userEmail}
+            const data = {password: this.state.password, userEmail: this.state.userEmail, timezone: this.props.timezone}
+            console.log('Login_submit_data=', data)
             this.props.loginUser(data)
             this.setState((prevState) => {
                 return {
@@ -81,14 +90,12 @@ class Login extends React.Component<ICustomInputProps, ICustomInputState> {
         }
     } 
 
-    logOut = () => this.props.logoutUser({test: 'TEST'})
-
-
-
+    logOut = () => this.props.logoutUser()
     render() {
         const { userEmail, password, passErr, emailErr } = this.state
         const emailDis = !userEmail || userEmail.search(MAIL_REGEX) < 0
         const passDis = !password || password.length < 8 || this.state.password.length > 50
+        const isUser = this.props.user && this.props.user?.userId && this.props.user?.token?.length > 0
 
         return (
             <>
@@ -138,14 +145,15 @@ class Login extends React.Component<ICustomInputProps, ICustomInputState> {
                             <Text style={styles.buttonText}>Submit</Text>
                         </TouchableOpacity>
                     </View>
-                    <View style={{marginTop: 40}}>
+                    {isUser &&  <View style={{marginTop: 30}}>
                         <TouchableOpacity
                             activeOpacity={0.5}
                             style={{}}
                             onPress={this.logOut}>
-                            <Text style={{color: '#62aee5'}}>LogOut</Text>
+                            <Text style={{color: '#62aee5', fontSize: 20}}>LogOut</Text>
                         </TouchableOpacity>
-                    </View>
+                    </View>}
+
                 </View>
             </>
         );
@@ -213,8 +221,11 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = (state: any) => {
+    const user = state.identity.user || null
+    const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone
     return {
-
+        user,
+        timezone
     };
 }
 

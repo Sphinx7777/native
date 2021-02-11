@@ -21,6 +21,7 @@ import {
     RESET_ALL_MESSAGE,
     CLEAR_REQUEST_RESULT,
     GET_IDENTITY,
+    SET_DEFAULT_IDENTITY
 } from './actions';
 import { IMessageBlock } from '../constants';
 
@@ -127,38 +128,27 @@ export type StateIdentity = {
     user: any;
     roles: any;
     rules: any;
-    menu: any;
-    companyInfo: any;
 };
 
 const initialIdentity: StateIdentity = {
     user: null,
     roles: null,
-    rules: null,
-    menu: null,
-    companyInfo: null,
+    rules: null
 };
 
 function identity(state: StateIdentity = initialIdentity, action: any) {
     switch (action.type) {
-
     case GET_IDENTITY:
-        if (action.user && action.roles && action.rules) {
-            return {
-                ...state,
-                user: { ...action.user },
-                roles: { ...action.roles },
-                rules: { ...action.rules },
-                menu: action.menu,
-                companyInfo: action.companyInfo,
+            return { 
+                user: action.identity.user,
+                roles: action.identity.roles,
+                rules: action.identity.rules,
             };
-        }
-        break;
+            case SET_DEFAULT_IDENTITY:
+            return { ...initialIdentity};
     }
-    return state;
+    return state;   
 }
-
-
 
 const appReducer = combineReducers({
     entities,

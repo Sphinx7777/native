@@ -1,7 +1,6 @@
 
-import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { StyleSheet, View, ScrollView, Platform } from 'react-native';
+import { StyleSheet, View, ScrollView, Text, TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
 import CallMenu from './CallMenu';
 import CustomInput from './CustomInput';
@@ -12,63 +11,6 @@ import saga from '../../decoradors/saga';
 import { EntityList } from '../../models/entity';
 import ContactList from './ContactList';
 
-const data: any = [
-    {
-        id: '1',
-        phone: '11111111',
-        email: 'spamoglot1111@gmail.com',
-        name: 'Sergei111',
-        date: '20-01-01',
-        dbType: 'asana',
-        details: 'details 111111111'
-    },
-    {
-        id: '2',
-        phone: '22222222',
-        email: 'spamoglot222@gmail.com',
-        name: 'Sergei222',
-        date: '20-02-02',
-        dbType: 'DBX',
-        details: 'details 2222222222'
-    },
-    {
-        id: '3',
-        phone: '33333333',
-        email: 'spamoglot333@gmail.com',
-        name: 'Sergei333',
-        date: '20-03-03',
-        dbType: 'C',
-        details: 'details 3333333333333'
-    }
-    ,
-    {
-        id: '4',
-        phone: '44444444',
-        email: 'spamoglot444@gmail.com',
-        name: 'Sergei444',
-        date: '20-04-04',
-        dbType: 'asana',
-        details: 'details 4444444444444'
-    },
-    {
-        id: '5',
-        phone: '55555555',
-        email: 'spamoglot555@gmail.com',
-        name: 'Sergei555',
-        date: '20-05-05',
-        dbType: 'DBX',
-        details: 'details 5555555555'
-    },
-    {
-        id: '6',
-        phone: '66666666',
-        email: 'spamoglot666@gmail.com',
-        name: 'Sergei666',
-        date: '20-06-06',
-        dbType: 'C',
-        details: 'details 666666666666666'
-    }
-]
 interface ISignalProps {
     dataItems?: EntityList<ISingleDataItem>;
     user?: any;
@@ -131,11 +73,18 @@ class Signal extends React.Component<ISignalProps> {
     }
 
     componentDidMount() {
-        this.getSignalData();
+        const validUser = this.props.user && this.props.user?.token && this.props.user?.token?.length > 0
+        if (validUser) {
+            this.getSignalData();
+        }       
     }
 
     componentDidUpdate(prevProps: any) {
-        if (prevProps.dataItems !== this.props.dataItems) {
+        const validUser = this.props.user && prevProps.user !== this.props.user && this.props.user?.token && this.props.user?.token?.length > 0 && !this.props.dataItems
+        if (validUser) {
+            this.getSignalData();
+        }
+    if (prevProps.dataItems !== this.props.dataItems) {
             const currentElement = this.props.dataItems && this.props.dataItems?.valueSeq()?.get(0)
             this.setState((prevState) => {
                 return {
@@ -148,7 +97,25 @@ class Signal extends React.Component<ISignalProps> {
 
     render() {
         const { currentItemIndex, currentElement } = this.state
-        const { dataItems } = this.props
+        const { dataItems, user, navigation } = this.props
+        const validUser = user && user?.token && user?.token?.length > 0
+        if (!validUser) {
+            navigation.navigate('Login')
+        }
+        if (!validUser) {
+            return (
+            <View style={styles.loadContainer}>
+                <View style={{...styles.loadContainer, height:100}}>
+                    <Text style={{fontSize: 22, fontWeight: '600'}}>Only register user</Text>
+                    <TouchableOpacity
+                        activeOpacity={0.5}
+                        style={{}}
+                        onPress={() => navigation.navigate('Login')}>
+                        <Text style={{color: '#62aee5', fontSize: 20, marginTop: 30}}>Go to login</Text>
+                    </TouchableOpacity>
+                </View>
+            </View>)
+        }
 
         return (
             <View style={styles.container}>
@@ -185,14 +152,22 @@ const styles = StyleSheet.create({
     },
     container: {
         flex: 2
+    },
+    loadContainer: {
+        display:'flex',
+        flexDirection: 'column',
+        height: 270,
+        justifyContent: 'center',
+        alignItems: 'center'
     }
 });
 
 const mapStateToProps = (state: any) => {
     const dataItems = state.entities.get('signalData');
+    const user = state.identity.user || null
     return {
         dataItems,
-        user: null
+        user
     };
 }
 

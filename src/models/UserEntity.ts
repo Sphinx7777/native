@@ -55,7 +55,6 @@ class UserEntity extends Entity {
 
     @action()
     public * fetchProfile() {
-        console.log('UserEntity.fetchProfile()');
         yield call(this.xRead, '/user/profile');
     }
 

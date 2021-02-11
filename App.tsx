@@ -1,6 +1,6 @@
 
 import 'react-native-gesture-handler';
-import * as React from 'react';
+import React from 'react';
 import { Provider } from 'react-redux';
 import { NavigationContainer } from '@react-navigation/native';
 import makeStore from './src/redux/store';
@@ -9,14 +9,11 @@ import TestedOnly from './src/TestedOnly';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { StatusBar } from 'expo-status-bar';
 import Login from './src/components/Signal/Login';
-import { StyleSheet, useWindowDimensions } from 'react-native';
-
+import { StyleSheet } from 'react-native';
 
 const App = () => {
     const store = makeStore()
     const Drawer = createDrawerNavigator();
-    const user = store?.getState()?.identity?.user
-    const dimensions = useWindowDimensions();
 
     return (
         <Provider store={store}>
@@ -40,4 +37,3 @@ const styles = StyleSheet.create({
 });
 
 export default App;
-// initialRouteName={`${user ? 'Home' : 'Login'}`}

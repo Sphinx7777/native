@@ -31,10 +31,8 @@ class DataEntity extends Entity {
 
     @action()
     public * getData() {
-
         const response = yield call(this.xRead, 'http://neologic.golden-team.org/api/page/url/services');
     }
-
 }
 
 export default new DataEntity();

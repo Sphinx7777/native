@@ -15,9 +15,11 @@ export const CLEAR_REQUEST_RESULT = 'CLEAR_REQUEST_RESULT';
 export const MODEL_CLEAR = 'MODEL_CLEAR';
 export const PAGE_SET_FILTER = 'PAGE_SET_FILTER';
 export const GET_IDENTITY = 'GET_IDENTITY';
+export const SET_DEFAULT_IDENTITY = 'SET_DEFAULT_IDENTITY';
 export const CLEAR_IDENTITY = 'CLEAR_IDENTITY';
 export const SET_SSR_DATA = 'QUERY_DATA';
 export const CLEAR_SSR_DATA = 'CLEAR_QUERY';
+
 
 export enum IMethod {
     READ = 'READ',
@@ -75,6 +77,7 @@ export const toastMessage = (text: string, msgType: MessageType) => action(TOAST
 export const setSSRData = (data: any = null) => action(SET_SSR_DATA, data);
 export const clearSSRData = (name: string) => action(CLEAR_SSR_DATA, { name });
 export const getIdentity = (data: any) => action(GET_IDENTITY, data);
+export const logoutUserAction = () => action(SET_DEFAULT_IDENTITY, {});
 export const clearIdentity = () => action(CLEAR_IDENTITY, {});
 
 export const pageClear = (pageName: string) => action(PAGE_CLEAR, { pageName });
