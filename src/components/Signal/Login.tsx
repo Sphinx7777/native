@@ -1,4 +1,5 @@
 import React from 'react';
+import * as Localization from 'expo-localization'
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, Image } from 'react-native';
 import { connect } from 'react-redux';
 import Identity from '../../models/identity';
@@ -9,7 +10,6 @@ interface ICustomInputProps {
     logoutUser?: () => void;
     user?: any;
     navigation?: any;
-    timezone?: string;
 }
 interface ICustomInputState {
     userEmail?: string;
@@ -75,7 +75,7 @@ class Login extends React.Component<ICustomInputProps, ICustomInputState> {
             })
         }
         if (emailValid && passValid) {
-            const data = {password: this.state.password, userEmail: this.state.userEmail, timezone: this.props.timezone}
+            const data = {password: this.state.password, userEmail: this.state.userEmail, timezone: Localization.timezone}
             console.log('Login_submit_data=', data)
             this.props.loginUser(data)
             this.setState((prevState) => {
@@ -222,10 +222,8 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = (state: any) => {
     const user = state.identity.user || null
-    const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone
     return {
-        user,
-        timezone
+        user
     };
 }
 

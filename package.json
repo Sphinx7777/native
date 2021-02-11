@@ -15,6 +15,7 @@
     "@react-navigation/stack": "^5.14.2",
     "cross-fetch": "^3.0.6",
     "expo": "~40.0.0",
+    "expo-localization": "~9.1.0",
     "expo-status-bar": "~1.0.3",
     "humps": "^2.0.1",
     "immutable": "^4.0.0-rc.12",
