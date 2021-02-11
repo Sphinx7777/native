@@ -76,7 +76,6 @@ class Login extends React.Component<ICustomInputProps, ICustomInputState> {
         }
         if (emailValid && passValid) {
             const data = {password: this.state.password, userEmail: this.state.userEmail, timezone: Localization.timezone}
-            console.log('Login_submit_data=', data)
             this.props.loginUser(data)
             this.setState((prevState) => {
                 return {

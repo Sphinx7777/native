@@ -1,7 +1,7 @@
 import { all } from 'redux-saga/effects';
 import {createStore, applyMiddleware, compose, Store} from 'redux';
-import createSagaMiddleware, {Task, END} from 'redux-saga';
-import next, {AppState} from './reducers';
+import createSagaMiddleware, {Task} from 'redux-saga';
+import rootReducer from './reducers';
 import Entity from '../../src/models/entity';
 
 declare global {
@@ -9,14 +9,12 @@ declare global {
         __REDUX_DEVTOOLS_EXTENSION_COMPOSE__?: typeof compose;
     }
 }
-
 export interface SagaStore extends Store {
     sagaTask?: Task;
     runSaga: () => void;
 }
 
 const rootSaga = function* root() {
-    // console.log('Run Sagas:', Entity.saga.map(o => o.payload.fn.name));
     yield all( Entity.saga );
 };
 
@@ -30,10 +28,9 @@ export const makeStore = () => {
 
     const enhancer = composeEnhancers(
         applyMiddleware(sagaMiddleware)
-        // other store enhancers if any
     );
 
-    const store = createStore(next, enhancer) as SagaStore;
+    const store = createStore(rootReducer, enhancer) as SagaStore;
     store.sagaTask = sagaMiddleware.run(rootSaga);
     Entity.store = store;
     store.runSaga = () => sagaMiddleware.run(rootSaga);
