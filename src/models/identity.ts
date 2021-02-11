@@ -58,17 +58,12 @@ class Identity extends Entity {
 
     @action()
     public * logoutUser(data: any) {
-        try {
-            const { response } = yield call(Entity.fetch, '/auth/logout', data, HTTP_METHOD.POST);
-            if (response && response.user && !response.user.userId) {
-                yield put(getIdentity(response));
-                yield put(Entity.clear());
-            }
-        } finally {
-            if (yield cancelled()) {
-                ('authorize yield cancelled');
-            }
-        }
+        console.log('logoutUser', data)
+            // const { response } = yield call(Entity.fetch, '/auth/logout', data, HTTP_METHOD.POST);
+            // if (response && response.user && !response.user.userId) {
+            //     yield put(getIdentity(response));
+            //     yield put(Entity.clear());
+            // }
     }
 
     public * showMessage() {

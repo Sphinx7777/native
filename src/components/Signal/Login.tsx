@@ -8,6 +8,7 @@ import { MAIL_REGEX } from '../../../src/utils';
 
 interface ICustomInputProps {
     loginUser?: (data: any) => void;
+    logoutUser?: (data: any) => void;
 }
 interface ICustomInputState {
     userEmail?: string;
@@ -15,7 +16,7 @@ interface ICustomInputState {
     emailErr?: string;
     passErr?: string;
 }
-@saga(Identity, ['loginUser'])
+@saga(Identity, ['loginUser', 'logoutUser'])
 class Login extends React.Component<ICustomInputProps, ICustomInputState> {
 
     state = {
@@ -80,6 +81,8 @@ class Login extends React.Component<ICustomInputProps, ICustomInputState> {
         }
     } 
 
+    logOut = () => this.props.logoutUser({test: 'TEST'})
+
 
 
     render() {
@@ -135,6 +138,14 @@ class Login extends React.Component<ICustomInputProps, ICustomInputState> {
                             <Text style={styles.buttonText}>Submit</Text>
                         </TouchableOpacity>
                     </View>
+                    <View style={{marginTop: 40}}>
+                        <TouchableOpacity
+                            activeOpacity={0.5}
+                            style={{}}
+                            onPress={this.logOut}>
+                            <Text style={{color: '#62aee5'}}>LogOut</Text>
+                        </TouchableOpacity>
+                    </View>
                 </View>
             </>
         );
@@ -159,7 +170,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         flexDirection: 'column',
-        marginBottom: 40
+        marginBottom: 20
     },
     inputContainer: {
         width: '100%'

@@ -9,7 +9,7 @@ import CustomInput from './CustomInput';
 import call from 'react-native-phone-call'
 import DataEntity, { ISingleDataItem } from '../../models/DataEntity';
 import saga from '../../decoradors/saga';
-import { EntityMap, EntityList } from '../../models/entity';
+import { EntityList } from '../../models/entity';
 import ContactList from './ContactList';
 
 const data: any = [
