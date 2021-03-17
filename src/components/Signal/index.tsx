@@ -27,7 +27,7 @@ class Signal extends React.Component<ISignalProps> {
     }
 
     getSignalData = async () => {
-        const res = await fetch(`http://neologic.golden-team.org/api/page/url/services`)
+        const res = await fetch(`http://neologic.golden-team.org/api/page/url/process`)
         const response: any = await res.json()
         if (response) {
             this.props.getData()

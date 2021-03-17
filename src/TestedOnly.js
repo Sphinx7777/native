@@ -15,8 +15,9 @@ import {
   Linking,
   FlatList,
   SafeAreaView,
-  Image,
+  Image, Button, PermissionsAndroid 
 } from 'react-native';
+
 
 //Import Call Detector
 import CallDetectorManager from 'react-native-call-detection';
@@ -40,6 +41,31 @@ const App = () => {
   let [callStates, setCallStates] = useState([]);
   let [isStart, setIsStart] = useState(false);
   let [flatListItems, setFlatListItems] = useState([]);
+  let [stateGranted, setStateGranted] = useState(null);
+
+  const requestPhoneStatePermission = async () => {
+    try {
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.READ_PHONE_STATE,
+        {
+          title: "Cool READ_PHONE_STATE Permission",
+          message:
+            "Listener needs access to your READ_PHONE_STATE",
+          buttonNeutral: "Ask Me Later",
+          buttonNegative: "Cancel",
+          buttonPositive: "OK"
+        }
+      );
+      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+        setStateGranted(PermissionsAndroid.RESULTS.GRANTED)
+        console.log("You can use the READ_PHONE_STATE");
+      } else {
+        console.log("READ_PHONE_STATE permission denied");
+      }
+    } catch (err) {
+      console.warn(err);
+    }
+  };
 
 
 
@@ -55,7 +81,7 @@ const App = () => {
       console.log('Stop');
       callDetector && callDetector.dispose();
     } else {
-      console.log('Start');
+      console.log('Start', 'stateGranted===', stateGranted);
       callDetector = new CallDetectorManager(
         (event, number) => {
           console.log('event -> ',
@@ -129,9 +155,13 @@ const App = () => {
         }} />
     );
   };
-console.log('flatListItems', flatListItems)
+console.log('flatListItems', flatListItems, 'callStates', callStates)
   return (
     <SafeAreaView style={{flex: 1, paddingTop: 30}}>
+       <View style={styles.container}>
+    <Text style={styles.item}>Try permissions</Text>
+    <Button title="request permissions" onPress={requestPhoneStatePermission} />
+  </View>
       <View style={styles.container}>
         <View style={styles.header}>
           <Text style={styles.headerTextLarge}>
