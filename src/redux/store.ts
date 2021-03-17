@@ -3,7 +3,14 @@ import {createStore, applyMiddleware, compose, Store} from 'redux';
 import createSagaMiddleware, {Task} from 'redux-saga';
 import rootReducer from './reducers';
 import Entity from '../../src/models/entity';
+import { persistStore, persistReducer } from 'redux-persist'
+import AsyncStorage from '@react-native-community/async-storage';
 
+const persistConfig = {
+    key: 'root',
+    storage: AsyncStorage,
+    whitelist: ['identity'],
+}
 declare global {
     interface Window {
         __REDUX_DEVTOOLS_EXTENSION_COMPOSE__?: typeof compose;
@@ -29,14 +36,15 @@ export const makeStore = () => {
     const enhancer = composeEnhancers(
         applyMiddleware(sagaMiddleware)
     );
-
-    const store = createStore(rootReducer, enhancer) as SagaStore;
+    const persistedReducer = persistReducer(persistConfig, rootReducer)
+    let store = createStore(persistedReducer, enhancer) as SagaStore
     store.sagaTask = sagaMiddleware.run(rootSaga);
     Entity.store = store;
     store.runSaga = () => sagaMiddleware.run(rootSaga);
+    let persistor = persistStore(store)
     
 
-    return store;
+    return {store, persistor};
 };
 
 export default makeStore;

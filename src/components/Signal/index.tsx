@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { StyleSheet, View, ScrollView, Text, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, ScrollView, Text, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { connect } from 'react-redux';
 import CallMenu from './CallMenu';
 import CustomInput from './CustomInput';
@@ -47,6 +47,7 @@ class Signal extends React.Component<ISignalProps> {
         }
         return call(args)
             .then((r: any) => {
+                console.log('call', r)
                 return r;
             })
             .catch((err: any) => {
@@ -116,6 +117,13 @@ class Signal extends React.Component<ISignalProps> {
                 </View>
             </View>)
         }
+        if (!dataItems || dataItems.size === 0) {
+            return (<View style={styles.loadContainer}>
+                <Text style={{ ...styles.loadContainer, height: 100 }}>
+                    <ActivityIndicator size="large" color="green" />
+                </Text>
+            </View>)
+        }
 
         return (
             <View style={styles.container}>
@@ -163,7 +171,7 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = (state: any) => {
-    const dataItems = state.entities.get('signalData');
+    const dataItems = state.entities.get('signalData')
     const user = state.identity.user || null
     return {
         dataItems,

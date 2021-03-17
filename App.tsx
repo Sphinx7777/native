@@ -10,13 +10,15 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 import { StatusBar } from 'expo-status-bar';
 import Login from './src/components/Signal/Login';
 import { StyleSheet } from 'react-native';
+import { PersistGate } from 'redux-persist/integration/react'
 
 const App = () => {
     const store = makeStore()
     const Drawer = createDrawerNavigator();
-
+console.log('store.store', store.store.getState())
     return (
-        <Provider store={store}>
+        <Provider store={store.store}>
+            <PersistGate loading={null} persistor={store.persistor}>
             <StatusBar animated={true} backgroundColor='#61dafb' />
             <NavigationContainer>
                 <Drawer.Navigator initialRouteName='Home' drawerStyle={styles.drawerStyle}>
@@ -25,6 +27,7 @@ const App = () => {
                     <Drawer.Screen name='Test' component={TestedOnly} options={{ title: 'Test' }} />
                 </Drawer.Navigator>
             </NavigationContainer>
+            </PersistGate>
         </Provider>
     );
 }
